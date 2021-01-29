@@ -1,44 +1,51 @@
 import EmergencySchema from '../models/emergency.model';
 // const EmergencySchema = require('../models/emergency.model');
 // const usersModel = require('Schemas/users')
-import db from '../index';
-
+import { IEmergency } from '../interfaces/IEmergency';
 
 export default module.exports = {
-  createEmergency: async () => {
-    const emergency = new EmergencySchema({
-      //   location: ref.schema,
-      bluntTrauma: false,
-      hemmoraging: false,
-      choking: false,
-      drowning: false,
-      stroke: false,
-      heartRelated: false,
-      other: false,
-      responderOnScene: false,
-      //   responders: ref.schemaObject
-    });
+  getAllEmergencies: async () => {
     try {
-      const newEmergency = await emergency.save();
-      return newEmergency;
-    } catch (error) {
-      throw error;
+      return await EmergencySchema.find();
+    } catch (err) {
+      throw new Error('Server Error, could not return list of emergencies');
     }
   },
 
-  getEmergencyById: async (id: number) => {
-    // ..
+  getEmergency: async (id: string) => {
+    try {
+      return await EmergencySchema.findById({ _id: id });
+    } catch (err) {
+      throw new Error('Server Error, could not return list of emergencies');
+    }
   },
 
-  getAllEmergencies: async () => {
-//       db.collection('emergencies').findOne({}, function (err: any, result: any) {
-//     if (err) throw err;
-//     console.log(result);
-//     db.close();
-//   });
+  createEmergency: async () => {
+    try {
+      const emergency = new EmergencySchema({
+        active: true,
+        //   location: ref.schema,
+        bluntTrauma: false,
+        hemmoraging: false,
+        choking: false,
+        drowning: false,
+        stroke: false,
+        heartRelated: false,
+        allergyRelated: false,
+        other: false,
+        responderOnScene: false,
+        //   responders: ref.schemaObject
+      });
+      const newEmergency = await emergency.save();
+      return newEmergency;
+    } catch (err) {
+      throw new Error('Server Error, could not create new emergency');
+    }
   },
 
-  updateEmergency: async (id: number) => {},
+  updateEmergency: async (id: string) => {},
 
-  endEmergency: async () => {},
+  endEmergency: async (emergency: IEmergency) => {
+
+  },
 };

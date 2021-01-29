@@ -1,28 +1,41 @@
 import express, { Router } from 'express';
 const router: Router = express.Router();
 import emergencyController from '../../controllers/emergency.controller';
-import db from '../../index';
 
 // Returns allEmergencies
 router.get('/', async (req, res, next) => {
-  const emergencies = emergencyController.getAllEmergencies();
-  console.log('🚀 ~ router.get ~ emergencies ', emergencies);
+  try {
+    const emergencies = await emergencyController.getAllEmergencies();
+    console.log('🚀 ~ router.get ~ emergencies ', emergencies);
 
-  res.status(200).send(emergencies);
+    res.status(200).send(emergencies);
+  } catch (err) { 
+    next(err);
+  }
+});
 
-  //   db.collection('emergencies').findOne({}, function (err: any, result: any) {
-  //     if (err) throw err;
-  //     console.log(result);
-  //     db.close();
-  //   });
+router.get('/getEmergency', async (req, res, next) => {
+  try {
+    const { id } = req.body;
+    const emergencies = await emergencyController.getEmergency(
+      '6013c19812a9031de374c1e0'
+    );
+    console.log('🚀 ~ router.get ~ emergencies ', emergencies);
 
-  // const emergencies = await test.getAllEmergencies();
-  // console.log('🚀 ~ router.post ~ author', emergencies);
+    res.status(200).send(emergencies);
+  } catch (err) {
+    next(err);
+  }
+});
 
-  //   res.status(201).json({
-  //     message: 'Created successfully',
-  //     author,
-  //   });
+router.get('/createEmergency', async (req, res, next) => {
+  try {
+    const newEmergency = await emergencyController.createEmergency();
+    console.log('new emergency returned from DB', newEmergency);
+    res.status(200).send(newEmergency);
+  } catch (err) {
+    next(err);
+  }
 });
 
 // module.exports = router;
