@@ -26,6 +26,6 @@
   //     db.close();
   //   });
   // });
-};
+// };
 
 // export default test;

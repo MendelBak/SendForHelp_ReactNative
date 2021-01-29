@@ -1,10 +1,14 @@
 import express, { Router } from 'express';
 const router: Router = express.Router();
-import test from '../../controllers/emergency.controller';
+import emergencyController from '../../controllers/emergency.controller';
+import db from '../../index';
 
+// Returns allEmergencies
 router.get('/', async (req, res, next) => {
-  console.log('this is the emergency controller imported as  "test" ->', test);
-  res.status(200).send();
+  const emergencies = emergencyController.getAllEmergencies();
+  console.log('🚀 ~ router.get ~ emergencies ', emergencies);
+
+  res.status(200).send(emergencies);
 
   //   db.collection('emergencies').findOne({}, function (err: any, result: any) {
   //     if (err) throw err;
@@ -12,8 +16,8 @@ router.get('/', async (req, res, next) => {
   //     db.close();
   //   });
 
-  //   const author = await test.getAllEmergencies();
-  //   console.log('🚀 ~ router.post ~ author', author);
+  // const emergencies = await test.getAllEmergencies();
+  // console.log('🚀 ~ router.post ~ author', emergencies);
 
   //   res.status(201).json({
   //     message: 'Created successfully',

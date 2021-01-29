@@ -1,6 +1,8 @@
 import EmergencySchema from '../models/emergency.model';
 // const EmergencySchema = require('../models/emergency.model');
 // const usersModel = require('Schemas/users')
+import db from '../index';
+
 
 export default module.exports = {
   createEmergency: async () => {
@@ -29,7 +31,11 @@ export default module.exports = {
   },
 
   getAllEmergencies: async () => {
-    // ...
+//       db.collection('emergencies').findOne({}, function (err: any, result: any) {
+//     if (err) throw err;
+//     console.log(result);
+//     db.close();
+//   });
   },
 
   updateEmergency: async (id: number) => {},
