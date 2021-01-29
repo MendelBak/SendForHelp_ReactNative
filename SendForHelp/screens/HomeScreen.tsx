@@ -72,7 +72,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         <Text>Home!</Text>
         <Button
           title="Go to Settings"
-          onPress={() => navigation.navigate('Details')}
+          onPress={() => navigation.navigate('Location Details')}
         />
       </View>
     </View>

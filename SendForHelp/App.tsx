@@ -13,9 +13,10 @@ const Tab = createBottomTabNavigator();
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/DetailsScreen';
+import DetailsScreen from './screens/LocationDetails';
 import FirstResponderScreen from './screens/FirstResponderScreen';
 import SymptomsScreen from './screens/SymptomsScreen';
+import LocationDetailsScreen from './screens/LocationDetails';
 
 // function HomeScreen({navigation}) {
 //   return (
@@ -56,7 +57,7 @@ export default function App() {
         }}>
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Symptoms" component={SymptomsScreen} />
-        <Tab.Screen name="Details" component={DetailsScreen} />
+        <Tab.Screen name="Location Details" component={LocationDetailsScreen} />
         <Tab.Screen name="First Responder" component={FirstResponderScreen} />
       </Tab.Navigator>
     </NavigationContainer>
