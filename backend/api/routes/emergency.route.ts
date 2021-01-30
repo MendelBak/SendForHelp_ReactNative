@@ -6,21 +6,10 @@ import emergencyController from '../../controllers/emergency.controller';
 router.get('/', async (req, res, next) => {
   try {
     const emergencies = await emergencyController.getAllEmergencies();
-    console.log('🚀 ~ router.get ~ emergencies ', emergencies);
-
-    res.status(200).send(emergencies);
-  } catch (err) { 
-    next(err);
-  }
-});
-
-router.get('/getEmergency', async (req, res, next) => {
-  try {
-    const { id } = req.body;
-    const emergencies = await emergencyController.getEmergency(
-      '6013c19812a9031de374c1e0'
+    console.log(
+      '🚀 ~ router.getAllEmergencies / root route ~ emergencies ',
+      emergencies
     );
-    console.log('🚀 ~ router.get ~ emergencies ', emergencies);
 
     res.status(200).send(emergencies);
   } catch (err) {
@@ -28,15 +17,44 @@ router.get('/getEmergency', async (req, res, next) => {
   }
 });
 
-router.get('/createEmergency', async (req, res, next) => {
+// TODO: Probably should not return the new object here. Better a 201
+router.post('/createEmergency', async (req, res, next) => {
   try {
     const newEmergency = await emergencyController.createEmergency();
-    console.log('new emergency returned from DB', newEmergency);
     res.status(200).send(newEmergency);
+    // res.status(201).send();
   } catch (err) {
     next(err);
   }
 });
 
-// module.exports = router;
+router.get('/getEmergency/:id', async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const emergency = await emergencyController.getEmergency(id);
+    res.status(200).send(emergency);
+  } catch (err) {
+    console.log('Server error: Could not get emergency');
+    next(err);
+  }
+});
+
+router.put('/updateEmergency', async (req, res, next) => {
+  try {
+    await emergencyController.updateEmergency(req.body);
+    res.status(201).send();
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put('/endEmergency', async (req, res, next) => {
+  try {
+    await emergencyController.endEmergency(req.body.id);
+    res.status(201).send();
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;

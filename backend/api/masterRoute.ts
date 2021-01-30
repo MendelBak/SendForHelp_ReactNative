@@ -8,7 +8,7 @@ router.get('/', async (req, res, next) => {
   // router.use('/medicalHistory', medicalHistoryRoute);
   // router.use('/user', userRoute);
 
-  res.status(400).send('Incorrect route');
+  res.status(400).send('This is the master route. Incorrect route.');
 });
 
 export default router;
