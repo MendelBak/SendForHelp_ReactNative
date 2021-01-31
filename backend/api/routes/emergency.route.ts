@@ -17,7 +17,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// TODO: Probably should not return the new object here. Better a 201
+// TODO: Probably should return this model to get the DB _id that is created.
 router.post('/createEmergency', async (req, res, next) => {
   try {
     const newEmergency = await emergencyController.createEmergency();

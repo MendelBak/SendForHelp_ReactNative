@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 
 // Internal
 import { uri } from '../backend/config/dbConsts';
-import masterRoute from './api/masterRoute';
+import emergencyRoute from './api/routes/emergency.route';
 
 module.exports.mongoose = mongoose;
 
@@ -17,7 +17,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // Defines the routes used.
-app.use('/', masterRoute);
+app.use('/emergency', emergencyRoute);
+// app.use('/location', locationRoute);
+// app.use('/medicalHistory', medicalHistoryRoute);
+// app.use('/user', userRoute);
 
 app.listen(PORT, () => {
   // console.log(uri);
