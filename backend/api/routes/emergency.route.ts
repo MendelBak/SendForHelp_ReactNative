@@ -2,26 +2,21 @@ import express, { Router } from 'express';
 const router: Router = express.Router();
 import emergencyController from '../../controllers/emergency.controller';
 
-// Returns allEmergencies
+// Returns all emergencies
 router.get('/', async (req, res, next) => {
   try {
     const emergencies = await emergencyController.getAllEmergencies();
-    console.log(
-      '🚀 ~ router.getAllEmergencies / root route ~ emergencies ',
-      emergencies
-    );
-
     res.status(200).send(emergencies);
   } catch (err) {
     next(err);
   }
 });
 
-// TODO: Probably should return this model to get the DB _id that is created.
+// Returning this model to get the _id that is created by mongoose
 router.post('/createEmergency', async (req, res, next) => {
   try {
-    const newEmergency = await emergencyController.createEmergency();
-    res.status(200).send(newEmergency);
+    const newEmergency = await emergencyController.createEmergency(req.body);
+    res.status(201).send(newEmergency);
     // res.status(201).send();
   } catch (err) {
     next(err);

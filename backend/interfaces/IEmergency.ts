@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 
 export interface IEmergency extends mongoose.Document {
   active: boolean;
-  // location: object.ref
   bluntTrauma: boolean;
   hemmoraging: boolean;
   choking: boolean;
@@ -12,5 +11,5 @@ export interface IEmergency extends mongoose.Document {
   allergyRelated: boolean;
   other: boolean;
   responderOnScene: boolean;
-  // responder: []
+  // responder: [],
 }

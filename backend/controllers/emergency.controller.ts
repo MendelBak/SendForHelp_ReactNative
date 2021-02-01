@@ -1,12 +1,24 @@
 import EmergencySchema from '../models/emergency.model';
+import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
+import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
 
 export default module.exports = {
-  createEmergency: async () => {
+  createEmergency: async (emergencyLocation: IEmergencyLocation) => {
     try {
+      const newEmergencyLocation = new EmergencyLocationSchema({
+        altitudeAccuracy: emergencyLocation.altitudeAccuracy,
+        altitude: emergencyLocation.altitude,
+        accuracy: emergencyLocation.accuracy,
+        heading: emergencyLocation.heading,
+        longitude: emergencyLocation.longitude,
+        latitude: emergencyLocation.latitude,
+        speed: emergencyLocation.speed,
+        userId: emergencyLocation.userId,
+      });
+
       const emergency = new EmergencySchema({
         active: true,
-        //   location: ref.schema,
         bluntTrauma: false,
         hemmoraging: false,
         choking: false,
@@ -16,8 +28,12 @@ export default module.exports = {
         allergyRelated: false,
         other: false,
         responderOnScene: false,
+        emergencyLocation: newEmergencyLocation,
         //   responders: ref.schemaObject
       });
+
+      newEmergencyLocation.emergency = emergency._id;
+      await newEmergencyLocation.save();
       const newEmergency = await emergency.save();
       return newEmergency;
     } catch (err) {
@@ -27,7 +43,9 @@ export default module.exports = {
 
   getEmergency: async (id: string) => {
     try {
-      return await EmergencySchema.findById({ _id: id });
+      return await EmergencySchema.findOne({ _id: id }).populate(
+        'emergencyLocation'
+      );
     } catch (err) {
       throw new Error(
         `Server Error, could not return emergency of ID = ${id} : ${err}`
@@ -37,7 +55,7 @@ export default module.exports = {
 
   getAllEmergencies: async () => {
     try {
-      return await EmergencySchema.find();
+      return await EmergencySchema.find().populate('emergencyLocation').exec();
     } catch (err) {
       throw new Error(
         `Server Error, could not return list of emergencies: ${err}`
@@ -45,7 +63,6 @@ export default module.exports = {
     }
   },
 
-  // TODO: Should I return the updated object or just a 201?
   updateEmergency: async (emergency: IEmergency) => {
     try {
       return await EmergencySchema.findOneAndUpdate(

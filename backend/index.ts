@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 // Internal
 import { uri } from '../backend/config/dbConsts';
 import emergencyRoute from './api/routes/emergency.route';
+import emergencyLocationRoute from './api/routes/emergencyLocation.route';
 
 module.exports.mongoose = mongoose;
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 
 // Defines the routes used.
 app.use('/emergency', emergencyRoute);
+app.use('/emergencyLocation', emergencyLocationRoute);
 // app.use('/location', locationRoute);
 // app.use('/medicalHistory', medicalHistoryRoute);
 // app.use('/user', userRoute);
