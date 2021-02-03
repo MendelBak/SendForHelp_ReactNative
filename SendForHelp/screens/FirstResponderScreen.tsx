@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Linking, Pressable, StyleSheet, Vibration, Text, View } from 'react-native';
 
 import rootStores from '../stores';
-import EmergencyStore from '../stores//emergency.stores';
+import EmergencyStore from '../stores/emergency.store';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
@@ -15,7 +15,7 @@ const FirstResponderScreen = observer(() => {
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
         <Text>
-          {emergencyStore.getEmergency
+          {emergencyStore.getIsEmergency
             ? 'EMERGENCY IN PROGRESS'
             : 'NO EMERGENCY'}
         </Text>
@@ -34,7 +34,7 @@ const FirstResponderScreen = observer(() => {
 
       <Pressable
         disabled={
-          !emergencyStore.getEmergency ||
+          !emergencyStore.getIsEmergency ||
           !emergencyStore.getLocation.latitude ||
           !emergencyStore.getLocation.longitude
         }
@@ -52,7 +52,7 @@ const FirstResponderScreen = observer(() => {
         </View>
       </Pressable>
 
-      {emergencyStore.getEmergency ? (
+      {emergencyStore.getIsEmergency ? (
         <View
           style={{
             backgroundColor: 'grey',

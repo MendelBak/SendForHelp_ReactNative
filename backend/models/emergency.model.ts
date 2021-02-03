@@ -1,10 +1,14 @@
-import {Schema} from 'mongoose';
+import { Schema } from 'mongoose';
 import mongoose from 'mongoose';
 import { IEmergency } from '../interfaces/IEmergency';
 
 const EmergencySchema = new Schema(
   {
     active: { type: Boolean, required: true },
+    // User that initiated the emergency.
+    userId: { type: String, required: true },
+    responderOnScene: { type: Boolean, required: true },
+    // Begin symptoms
     bluntTrauma: { type: Boolean, required: true },
     hemmoraging: { type: Boolean, required: true },
     choking: { type: Boolean, required: true },
@@ -13,8 +17,12 @@ const EmergencySchema = new Schema(
     heartRelated: { type: Boolean, required: true },
     allergyRelated: { type: Boolean, required: true },
     other: { type: Boolean, required: true },
-    responderOnScene: { type: Boolean, required: true },
-    emergencyLocation: { type: Schema.Types.ObjectId, required: true, ref: 'EmergencyLocation' },
+    // End symptoms
+    emergencyLocation: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'EmergencyLocation',
+    },
     // responders: { type: Object.ref, required: false },
   },
   { timestamps: true, minimize: false }

@@ -10,8 +10,6 @@ const EmergencyLocationSchema = new Schema(
     longitude: { type: Number, required: true },
     latitude: { type: Number, required: true },
     speed: { type: Number, required: false },
-    // User that initiated the emergency.
-    userId: { type: String, required: true },
     emergency: { type: Schema.Types.ObjectId, required: true, ref: 'Emergency' },
   },
   { timestamps: true, minimize: false }

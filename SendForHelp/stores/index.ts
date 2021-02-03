@@ -1,4 +1,4 @@
-import EmergencyStore from './emergency.stores';
+import EmergencyStore from './emergency.store';
 
 import {
 	EMERGENCY_STORE,

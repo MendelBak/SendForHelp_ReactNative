@@ -23,7 +23,7 @@ import {
 // }
 
 // Internal
-import EmergencyStore from '../stores/emergency.stores';
+import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import {EMERGENCY_STORE} from '../stores/storesKeys';
 
@@ -34,7 +34,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
         <Text>
-          {emergencyStore.getEmergency
+          {emergencyStore.getIsEmergency
             ? 'EMERGENCY IN PROGRESS'
             : 'NO EMERGENCY'}
         </Text>
@@ -45,7 +45,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         </Text>
       </View>
       <Pressable
-        disabled={emergencyStore.getEmergency}
+        disabled={emergencyStore.getIsEmergency}
         onPress={() => (
           emergencyStore.declareEmergency(),
           navigation.navigate('Symptoms'),
@@ -58,7 +58,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       </Pressable>
 
       <Pressable
-        disabled={!emergencyStore.getEmergency}
+        disabled={!emergencyStore.getIsEmergency}
         onPress={() => (
           emergencyStore.cancelEmergency(), Vibration.vibrate(200)
         )}

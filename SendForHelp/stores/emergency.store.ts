@@ -1,10 +1,14 @@
+// External
 import {makeAutoObservable} from 'mobx';
-import EmergencyLocationModel from '../models/emergencyLocation.model';
 import Geolocation from 'react-native-geolocation-service';
-
-import {configure} from 'mobx';
 import {Alert} from 'react-native';
+import {configure} from 'mobx';
+import axios from 'axios';
+
+// Internal
+import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomsModel from '../models/symptoms.model';
+import EmergencyModel from '../models/emergency.model';
 
 configure({
   enforceActions: 'always',
@@ -15,45 +19,58 @@ configure({
 });
 
 export default class EmergencyStore {
-  private isEmergency = false;
+  // private isEmergency = false;
 
-  private location: EmergencyLocationModel = new EmergencyLocationModel();
+  private emergency: EmergencyModel = new EmergencyModel();
 
-  private firstResponder: string = '';
+  // private firstResponder: string = '';
 
-  private symptoms: SymptomsModel = new SymptomsModel();
+  // private location: EmergencyLocationModel = new EmergencyLocationModel();
+  // private symptoms: SymptomsModel = new SymptomsModel();
 
   constructor() {
     makeAutoObservable(this);
   }
 
   declareEmergency(): void {
-    this.isEmergency = true;
+    const newEmergency = new EmergencyModel();
+
+    // this.emergency.active = true;
     this.getCurrentPosition();
+    axios({
+      method: 'post',
+      url: '/emergency/createEmergency',
+      data: this.getIsEmergency,
+    });
   }
 
   cancelEmergency(): void {
-    this.isEmergency = false;
+    this.emergency.active = false;
     this.clearFirstResponder();
-    // Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
+    // TODO: Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
     this.clearLocation();
     this.clearSymptoms();
   }
 
-  get getEmergency(): boolean {
-    return this.isEmergency;
+  get getIsEmergency(): boolean {
+    return this.emergency.active;
   }
 
   setFirstResponder(id: string): void {
-    this.firstResponder = id;
+    this.emergency.firstResponders.push(id);
   }
 
-  clearFirstResponder(): void {
-    this.firstResponder = '';
+  clearFirstResponder(id: string): void {
+    this.emergency.firstResponders.splice(
+      this.emergency.firstResponders.findIndex(
+        (responderId) => responderId === id,
+      ),
+      1,
+    );
   }
 
   get getFirstResponder() {
-    return this.firstResponder;
+    return this.emergency.firstResponder;
   }
   //#region location
   async getCurrentPosition() {
@@ -84,29 +101,29 @@ export default class EmergencyStore {
   }
 
   setEmergencyLocation(position: GeolocationPosition): void {
-    this.location = new EmergencyLocationModel(position);
+    this.emergency.location = new EmergencyLocationModel(position);
   }
 
   get getLocation(): EmergencyLocationModel {
-    return this.location;
+    return this.emergency.location;
   }
 
   clearLocation(): void {
-    this.location = new EmergencyLocationModel();
+    this.emergency.location = new EmergencyLocationModel();
   }
   //#endregion location
 
   //#region symptoms
   saveSymptoms(symptoms: SymptomsModel) {
-    this.symptoms = new SymptomsModel(symptoms);
+    this.emergency.symptoms = new SymptomsModel(symptoms);
   }
 
   get getSymptoms(): SymptomsModel {
-    return this.symptoms;
+    return this.emergency.symptoms;
   }
 
   clearSymptoms(): void {
-    this.symptoms = new SymptomsModel();
+    this.emergency.symptoms = new SymptomsModel();
   }
   //#endregion symptoms
 }

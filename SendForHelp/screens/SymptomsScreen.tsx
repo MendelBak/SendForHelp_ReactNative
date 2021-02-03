@@ -3,7 +3,7 @@ import * as React from 'react';
 import {Pressable, StyleSheet, Vibration, Text, View} from 'react-native';
 
 import rootStores from '../stores';
-import EmergencyStore from '../stores/emergency.stores';
+import EmergencyStore from '../stores/emergency.store';
 import {EMERGENCY_STORE} from '../stores/storesKeys';
 import SymptomsModel from '../models/symptoms.model';
 
