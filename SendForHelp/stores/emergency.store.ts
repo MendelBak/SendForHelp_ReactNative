@@ -1,7 +1,7 @@
 // External
 import {makeAutoObservable} from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
-import {Alert} from 'react-native';
+import {Alert, PermissionsAndroid, Platform} from 'react-native';
 import {configure} from 'mobx';
 import axios from 'axios';
 
@@ -19,11 +19,7 @@ configure({
 });
 
 export default class EmergencyStore {
-  // private isEmergency = false;
-
   private emergency: EmergencyModel = new EmergencyModel();
-
-  // private firstResponder: string = '';
 
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
@@ -32,21 +28,69 @@ export default class EmergencyStore {
     makeAutoObservable(this);
   }
 
-  declareEmergency(): void {
-    const newEmergency = new EmergencyModel();
-
-    // this.emergency.active = true;
+  async declareEmergency() {
+    // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack.
+    // Hack is setting it later, instead of setting it during emergency creation. This causes two backend calls instead of one.
+    // This also messes with how to inform firstResponders of an emergency event (best to do during creation, not update).
     this.getCurrentPosition();
-    axios({
+    const emergencyLocation = new EmergencyLocationModel();
+
+    const symptoms = new SymptomsModel();
+
+    this.emergency = new EmergencyModel({
+      active: true,
+      responderOnScene: false,
+      firstResponders: [],
+      location: emergencyLocation,
+      symptoms: symptoms,
+      userId: '123',
+    });
+
+    console.log('this.emergency object', this.emergency);
+
+    await axios({
       method: 'post',
       url: '/emergency/createEmergency',
-      data: this.getIsEmergency,
+      data: this.emergency,
     });
+
+    // await fetch('http://10.0.0.2:8000/emergency/')
+    //   .then((response) => console.log('asdlkjfahsdlkjfhasdl'))
+    //   .then((data) => {
+    //     console.log('data' + JSON.stringify(data));
+    //   })
+    //   .catch(() => {
+    //     console.log('asdlfkahsdlfkjashdlkfj');
+    //   });
+
+    // TODO: Uncomment when using react device. This network is only for emulator.
+    // axios.get('https://10.0.2.2:8000/emergency').then((response) => {
+
+    fetch('http://8.8.8.8')
+      .then((response) => console.log('it worked!'))
+      .catch((error) => console.log(error));
+
+    // axios
+    //   .get('http://127.0.0.1:4040/emergency')
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .catch(() => {
+    //     console.log('error');
+    //   });
+    // axios
+    //   .post('localhost:8000/emergency/createEmergency', this.emergency), "Content-Type": "application/x-www-form-urlencoded",
+    // Accept: 'application/json';
+    //   .then((response) => console.log('response', response))
+    //   .catch((error) => {
+    //     console.error('There was an error!', error);
+    //   });
   }
 
   cancelEmergency(): void {
     this.emergency.active = false;
-    this.clearFirstResponder();
+    // TODO: need to add real ID when I create users.
+    this.removeFirstResponder('123');
     // TODO: Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
     this.clearLocation();
     this.clearSymptoms();
@@ -56,11 +100,11 @@ export default class EmergencyStore {
     return this.emergency.active;
   }
 
-  setFirstResponder(id: string): void {
+  addFirstResponder(id: string): void {
     this.emergency.firstResponders.push(id);
   }
 
-  clearFirstResponder(id: string): void {
+  removeFirstResponder(id: string): void {
     this.emergency.firstResponders.splice(
       this.emergency.firstResponders.findIndex(
         (responderId) => responderId === id,
@@ -69,15 +113,21 @@ export default class EmergencyStore {
     );
   }
 
-  get getFirstResponder() {
-    return this.emergency.firstResponder;
+  get getFirstResponders() {
+    return this.emergency.firstResponders;
   }
+
   //#region location
   async getCurrentPosition() {
+    if (Platform.OS === 'android') {
+      await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      );
+    }
+
     Geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
         this.setEmergencyLocation(position);
-        console.log(position);
       },
       (error: any) => {
         Alert.alert(
@@ -104,7 +154,7 @@ export default class EmergencyStore {
     this.emergency.location = new EmergencyLocationModel(position);
   }
 
-  get getLocation(): EmergencyLocationModel {
+  get getEmergencyLocation(): EmergencyLocationModel {
     return this.emergency.location;
   }
 
@@ -114,7 +164,7 @@ export default class EmergencyStore {
   //#endregion location
 
   //#region symptoms
-  saveSymptoms(symptoms: SymptomsModel) {
+  updateSymptoms(symptoms: SymptomsModel) {
     this.emergency.symptoms = new SymptomsModel(symptoms);
   }
 

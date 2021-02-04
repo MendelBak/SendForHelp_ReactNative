@@ -28,21 +28,21 @@ const FirstResponderScreen = observer(() => {
 
       <Pressable style={styles.welcome}>
         <Text>Location of Emergency</Text>
-        <Text>Latitude: {emergencyStore.getLocation.latitude}</Text>
-        <Text>Longitude: {emergencyStore.getLocation.longitude}</Text>
+        <Text>Latitude: {emergencyStore.getEmergencyLocation.latitude}</Text>
+        <Text>Longitude: {emergencyStore.getEmergencyLocation.longitude}</Text>
       </Pressable>
 
       <Pressable
         disabled={
           !emergencyStore.getIsEmergency ||
-          !emergencyStore.getLocation.latitude ||
-          !emergencyStore.getLocation.longitude
+          !emergencyStore.getEmergencyLocation.latitude ||
+          !emergencyStore.getEmergencyLocation.longitude
         }
         onPress={() => (
-          emergencyStore.setFirstResponder('Mendel'),
+          emergencyStore.addFirstResponder('Mendel'),
           Vibration.vibrate(200),
           Linking.openURL(
-            `https://www.google.com/maps/search/?api=1&query=${emergencyStore.getLocation.latitude}+${emergencyStore.getLocation.longitude}`
+            `https://www.google.com/maps/search/?api=1&query=${emergencyStore.getEmergencyLocation.latitude}+${emergencyStore.getEmergencyLocation.longitude}`
           )
         )}
         style={styles.alertButton}

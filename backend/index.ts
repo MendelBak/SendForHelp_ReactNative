@@ -1,4 +1,3 @@
-// External
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
@@ -12,6 +11,15 @@ module.exports.mongoose = mongoose;
 
 const app = express();
 const PORT = 8000;
+
+import cors from 'cors';
+app.use(cors());
+
+app.all("/*", (req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json

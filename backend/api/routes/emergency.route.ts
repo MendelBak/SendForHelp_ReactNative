@@ -15,10 +15,12 @@ router.get('/', async (req, res, next) => {
 // Returning this model to get the _id that is created by mongoose
 router.post('/createEmergency', async (req, res, next) => {
   try {
+    console.log(req);
     const newEmergency = await emergencyController.createEmergency(req.body);
     res.status(201).send(newEmergency);
     // res.status(201).send();
   } catch (err) {
+    console.log('error creating new emergency ', err)
     next(err);
   }
 });

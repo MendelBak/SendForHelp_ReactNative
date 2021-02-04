@@ -8,16 +8,17 @@ export default class EmergencyModel {
   userId: string = '';
   symptoms: SymptomsModel = new SymptomsModel();
   location: EmergencyLocationModel = new EmergencyLocationModel();
-  // Probably the wrong type. Should rpobably contain userId of first responders.
+  // Should contain userId of first responders.
   firstResponders: string[] = [];
 
   constructor(emergencyModel?: EmergencyModel) {
     if (emergencyModel) {
-      this.userId = emergencyModel.userId;
       this.active = emergencyModel.active;
       this.responderOnScene = emergencyModel.responderOnScene;
+      this.userId = emergencyModel.userId;
       this.symptoms = emergencyModel.symptoms;
       this.location = emergencyModel.location;
+      this.firstResponders = emergencyModel.firstResponders;
     }
   }
 }

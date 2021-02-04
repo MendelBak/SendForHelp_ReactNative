@@ -60,8 +60,7 @@ const SymptomsScreen = observer(({navigation}: {navigation: any}) => {
         <Pressable
           onPress={() => (
             Vibration.vibrate(20),
-            console.log(symptoms),
-            emergencyStore.saveSymptoms(symptoms),
+            emergencyStore.updateSymptoms(symptoms),
             navigation.navigate('First Responder')
           )}
           style={styles.card}>
