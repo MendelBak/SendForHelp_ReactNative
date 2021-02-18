@@ -48,11 +48,11 @@ export default class EmergencyStore {
 
     console.log('this.emergency object', this.emergency);
 
-    await axios({
-      method: 'post',
-      url: '/emergency/createEmergency',
-      data: this.emergency,
-    });
+    // await axios({
+    //   method: 'post',
+    //   url: '/emergency/createEmergency',
+    //   data: this.emergency,
+    // });
 
     // await fetch('http://10.0.0.2:8000/emergency/')
     //   .then((response) => console.log('asdlkjfahsdlkjfhasdl'))
@@ -66,9 +66,12 @@ export default class EmergencyStore {
     // TODO: Uncomment when using react device. This network is only for emulator.
     // axios.get('https://10.0.2.2:8000/emergency').then((response) => {
 
-    fetch('http://8.8.8.8')
-      .then((response) => console.log('it worked!'))
+    fetch('http://b13fbd188cf7.ngrok.io/emergency')
+      .then(async (res) => console.log(await res.json()))
       .catch((error) => console.log(error));
+      
+    // const data = await test.json();
+    // console.log('🚀 ~ //axios.get ~ test', data);
 
     // axios
     //   .get('http://127.0.0.1:4040/emergency')
@@ -78,6 +81,7 @@ export default class EmergencyStore {
     //   .catch(() => {
     //     console.log('error');
     //   });
+
     // axios
     //   .post('localhost:8000/emergency/createEmergency', this.emergency), "Content-Type": "application/x-www-form-urlencoded",
     // Accept: 'application/json';
