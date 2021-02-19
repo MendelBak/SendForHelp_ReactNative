@@ -61,7 +61,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       <Pressable
         disabled={!emergencyStore.getIsEmergency}
         onPress={() => (
-          emergencyStore.cancelEmergency(), Vibration.vibrate(200)
+          emergencyStore.endEmergency(), Vibration.vibrate(200)
         )}
         style={styles.cancelButton}>
         <View style={styles.cancelButton}>

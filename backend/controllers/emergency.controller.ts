@@ -7,13 +7,13 @@ export default module.exports = {
   createEmergency: async (emergency: any) => {
     try {
       const newEmergencyLocation: any = new EmergencyLocationSchema({
-        altitudeAccuracy: emergency.location.altitudeAccuracy,
-        altitude: emergency.location.altitude,
-        accuracy: emergency.location.accuracy,
-        heading: emergency.location.heading,
-        longitude: emergency.location.longitude,
-        latitude: emergency.location.latitude,
-        speed: emergency.location.speed,
+        altitudeAccuracy: emergency.emergencyLocation.altitudeAccuracy,
+        altitude: emergency.emergencyLocation.altitude,
+        accuracy: emergency.emergencyLocation.accuracy,
+        heading: emergency.emergencyLocation.heading,
+        longitude: emergency.emergencyLocation.longitude,
+        latitude: emergency.emergencyLocation.latitude,
+        speed: emergency.emergencyLocation.speed,
       });
 
       const emergencySchema = new EmergencySchema({

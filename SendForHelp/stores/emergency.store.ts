@@ -18,6 +18,8 @@ configure({
   disableErrorBoundaries: false,
 });
 
+const URI = 'http://9b8de97ed904.ngrok.io';
+
 export default class EmergencyStore {
   private emergency: EmergencyModel = new EmergencyModel();
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
@@ -33,7 +35,6 @@ export default class EmergencyStore {
   }
 
   async declareEmergency(position: GeolocationPosition) {
-    console.log('🚀 ~ declareEmergency ~ position', position);
     // console.log('🚀 ~ declareEmergency ~ testLocation ', testLocation);
     const emergencyLocation = new EmergencyLocationModel(position);
 
@@ -43,29 +44,44 @@ export default class EmergencyStore {
       active: true,
       responderOnScene: false,
       firstResponders: [],
-      location: emergencyLocation,
+      emergencyLocation: emergencyLocation,
       symptoms: symptoms,
       userId: '123',
     });
 
     axios
-      .post(
-        'http://6c57477693dc.ngrok.io/emergency/createEmergency',
-        this.emergency,
+      .post(`${URI}/emergency/createEmergency`, this.emergency)
+      .then(
+        async (response) => (
+          await this.setEmergency(response.data),
+          console.log('response', response.data)
+        ),
       )
-      .then(async (response) => console.log('response', response.data))
       .catch((error) => {
         console.error('There was an error creating an emergency event!', error);
       });
   }
 
-  cancelEmergency(): void {
+  endEmergency(): void {
+    console.log('current emergency ', this.emergency);
+    if (!this.emergency.active) {
+      return;
+    }
     this.emergency.active = false;
     // TODO: need to add real ID when I create users.
     this.removeFirstResponder('123');
     // TODO: Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
     this.clearLocation();
     this.clearSymptoms();
+
+    axios
+      .put(`${URI}/emergency/endEmergency`, this.emergency.id)
+      .then(async (response) =>
+        console.log('response of end emergency', response),
+      )
+      .catch((error) => {
+        console.error('There was an error creating an emergency event!', error);
+      });
   }
 
   get getIsEmergency(): boolean {
@@ -74,10 +90,9 @@ export default class EmergencyStore {
 
   async getEmergencies() {
     const emergencies = axios
-      .get('http://f3d7d62039d7.ngrok.io/emergency')
+      .get(`${URI}/emergency`)
       .then(async (response) => {
-        const res = await response.data;
-        return res;
+        return await response.data;
       })
       .catch(() => {
         console.log('error');
@@ -90,12 +105,13 @@ export default class EmergencyStore {
   }
 
   removeFirstResponder(id: string): void {
-    this.emergency.firstResponders.splice(
-      this.emergency.firstResponders.findIndex(
-        (responderId) => responderId === id,
-      ),
-      1,
-    );
+    // TODO: This works (I think). Commented out for ease of testing.
+    // this.emergency.firstResponders.splice(
+    //   this.emergency.firstResponders.findIndex(
+    //     (responderId) => responderId === id,
+    //   ),
+    //   1,
+    // );
   }
 
   get getFirstResponders() {
@@ -135,16 +151,20 @@ export default class EmergencyStore {
     );
   }
 
+  setEmergency(emergency: EmergencyModel) {
+    this.emergency = emergency;
+  }
+
   setEmergencyLocation(position: GeolocationPosition): void {
-    this.emergency.location = new EmergencyLocationModel(position);
+    this.emergency.emergencyLocation = new EmergencyLocationModel(position);
   }
 
   get getEmergencyLocation(): EmergencyLocationModel {
-    return this.emergency.location;
+    return this.emergency.emergencyLocation;
   }
 
   clearLocation(): void {
-    this.emergency.location = new EmergencyLocationModel();
+    this.emergency.emergencyLocation = new EmergencyLocationModel();
   }
   //#endregion location
 
