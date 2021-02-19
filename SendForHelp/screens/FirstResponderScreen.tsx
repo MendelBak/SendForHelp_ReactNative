@@ -1,73 +1,78 @@
-import { observer } from 'mobx-react-lite';
+import {autorun, isComputed, isObservable, isObservableObject} from 'mobx';
+import {observer} from 'mobx-react-lite';
 import * as React from 'react';
-import { Linking, Pressable, StyleSheet, Vibration, Text, View } from 'react-native';
+import {
+  Linking,
+  Pressable,
+  StyleSheet,
+  Vibration,
+  Text,
+  View,
+} from 'react-native';
 
 import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
-import { EMERGENCY_STORE } from '../stores/storesKeys';
+import {EMERGENCY_STORE} from '../stores/storesKeys';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const FirstResponderScreen = observer(() => {
-  const symptoms = emergencyStore.getSymptoms;
+  const {
+    getFirstResponders,
+    getEmergencyLocation,
+    getIsEmergency,
+    getSymptoms,
+  } = emergencyStore;
 
   return (
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
+        <Text>{getIsEmergency ? 'EMERGENCY IN PROGRESS' : 'NO EMERGENCY'}</Text>
         <Text>
-          {emergencyStore.getIsEmergency
-            ? 'EMERGENCY IN PROGRESS'
-            : 'NO EMERGENCY'}
-        </Text>
-        <Text>
-          {emergencyStore.getFirstResponder
-            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponder}`
-            : ''}
+          {getFirstResponders ? `FIRST RESPONDER: ${getFirstResponders}` : ''}
         </Text>
       </View>
 
       <Pressable style={styles.welcome}>
         <Text>Location of Emergency</Text>
-        <Text>Latitude: {emergencyStore.getEmergencyLocation.latitude}</Text>
-        <Text>Longitude: {emergencyStore.getEmergencyLocation.longitude}</Text>
+        <Text>Latitude: {getEmergencyLocation.latitude}</Text>
+        <Text>Longitude: {getEmergencyLocation.longitude}</Text>
       </Pressable>
 
       <Pressable
         disabled={
-          !emergencyStore.getIsEmergency ||
-          !emergencyStore.getEmergencyLocation.latitude ||
-          !emergencyStore.getEmergencyLocation.longitude
+          !getIsEmergency ||
+          !getEmergencyLocation.latitude ||
+          !getEmergencyLocation.longitude
         }
         onPress={() => (
           emergencyStore.addFirstResponder('Mendel'),
           Vibration.vibrate(200),
           Linking.openURL(
-            `https://www.google.com/maps/search/?api=1&query=${emergencyStore.getEmergencyLocation.latitude}+${emergencyStore.getEmergencyLocation.longitude}`
+            `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
           )
         )}
-        style={styles.alertButton}
-      >
+        style={styles.alertButton}>
         <View style={styles.alertButton}>
           <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
         </View>
       </Pressable>
 
-      {emergencyStore.getIsEmergency ? (
+      {getIsEmergency ? (
         <View
           style={{
             backgroundColor: 'grey',
             width: 'auto',
             height: 'auto',
             padding: 10,
-          }}
-        >
-          <Text style={{ color: 'white' }}>
-            -- Choking: {symptoms.choking.toString()}
+          }}>
+          <Text style={{color: 'white'}}>
+            -- Choking: {getSymptoms.choking.toString()}
           </Text>
-          <Text>-- Drowning: {symptoms.drowning.toString()}</Text>
-          <Text>-- Hemmoraging: {symptoms.hemmoraging.toString()}</Text>
-          <Text>-- Blunt Trauma: {symptoms.bluntTrauma.toString()}</Text>
-          <Text>-- Other: {symptoms.other.toString()}</Text>
+          <Text>-- Drowning: {getSymptoms.drowning.toString()}</Text>
+          <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
+          <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
+          <Text>-- Other: {getSymptoms.other.toString()}</Text>
         </View>
       ) : null}
     </View>

@@ -9,7 +9,6 @@ export interface IEmergencyLocation extends mongoose.Document {
   latitude: number;
   speed: number;
   timestamp: any;
-  userId: string;
   // This is a ref for use by express populate()
   emergency: any;
 }

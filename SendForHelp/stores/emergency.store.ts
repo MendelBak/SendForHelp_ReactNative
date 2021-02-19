@@ -20,7 +20,6 @@ configure({
 
 export default class EmergencyStore {
   private emergency: EmergencyModel = new EmergencyModel();
-
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
 
@@ -28,12 +27,15 @@ export default class EmergencyStore {
     makeAutoObservable(this);
   }
 
-  async declareEmergency() {
-    // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack.
-    // Hack is setting it later, instead of setting it during emergency creation. This causes two backend calls instead of one.
-    // This also messes with how to inform firstResponders of an emergency event (best to do during creation, not update).
+  // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack. So I need to start to declare the emergency with the location request, and then initiate creation of an emergency.
+  initializeEmergency(): void {
     this.getCurrentPosition();
-    const emergencyLocation = new EmergencyLocationModel();
+  }
+
+  async declareEmergency(position: GeolocationPosition) {
+    console.log('🚀 ~ declareEmergency ~ position', position);
+    // console.log('🚀 ~ declareEmergency ~ testLocation ', testLocation);
+    const emergencyLocation = new EmergencyLocationModel(position);
 
     const symptoms = new SymptomsModel();
 
@@ -46,49 +48,15 @@ export default class EmergencyStore {
       userId: '123',
     });
 
-    console.log('this.emergency object', this.emergency);
-
-    // await axios({
-    //   method: 'post',
-    //   url: '/emergency/createEmergency',
-    //   data: this.emergency,
-    // });
-
-    // await fetch('http://10.0.0.2:8000/emergency/')
-    //   .then((response) => console.log('asdlkjfahsdlkjfhasdl'))
-    //   .then((data) => {
-    //     console.log('data' + JSON.stringify(data));
-    //   })
-    //   .catch(() => {
-    //     console.log('asdlfkahsdlfkjashdlkfj');
-    //   });
-
-    // TODO: Uncomment when using react device. This network is only for emulator.
-    // axios.get('https://10.0.2.2:8000/emergency').then((response) => {
-
-    fetch('http://b13fbd188cf7.ngrok.io/emergency')
-      .then(async (res) => console.log(await res.json()))
-      .catch((error) => console.log(error));
-      
-    // const data = await test.json();
-    // console.log('🚀 ~ //axios.get ~ test', data);
-
-    // axios
-    //   .get('http://127.0.0.1:4040/emergency')
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .catch(() => {
-    //     console.log('error');
-    //   });
-
-    // axios
-    //   .post('localhost:8000/emergency/createEmergency', this.emergency), "Content-Type": "application/x-www-form-urlencoded",
-    // Accept: 'application/json';
-    //   .then((response) => console.log('response', response))
-    //   .catch((error) => {
-    //     console.error('There was an error!', error);
-    //   });
+    axios
+      .post(
+        'http://6c57477693dc.ngrok.io/emergency/createEmergency',
+        this.emergency,
+      )
+      .then(async (response) => console.log('response', response.data))
+      .catch((error) => {
+        console.error('There was an error creating an emergency event!', error);
+      });
   }
 
   cancelEmergency(): void {
@@ -102,6 +70,19 @@ export default class EmergencyStore {
 
   get getIsEmergency(): boolean {
     return this.emergency.active;
+  }
+
+  async getEmergencies() {
+    const emergencies = axios
+      .get('http://f3d7d62039d7.ngrok.io/emergency')
+      .then(async (response) => {
+        const res = await response.data;
+        return res;
+      })
+      .catch(() => {
+        console.log('error');
+      });
+    return emergencies;
   }
 
   addFirstResponder(id: string): void {
@@ -131,7 +112,7 @@ export default class EmergencyStore {
 
     Geolocation.getCurrentPosition(
       (position: GeolocationPosition) => {
-        this.setEmergencyLocation(position);
+        this.declareEmergency(position);
       },
       (error: any) => {
         Alert.alert(

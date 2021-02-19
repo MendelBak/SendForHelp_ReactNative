@@ -39,15 +39,16 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
             : 'NO EMERGENCY'}
         </Text>
         <Text>
-          {emergencyStore.getFirstResponder
-            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponder}`
+          {emergencyStore.getFirstResponders
+            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponders}`
             : ''}
         </Text>
       </View>
       <Pressable
         disabled={emergencyStore.getIsEmergency}
         onPress={() => (
-          emergencyStore.declareEmergency(),
+          emergencyStore.initializeEmergency(),
+          // emergencyStore.declareEmergency(),
           navigation.navigate('Symptoms'),
           Vibration.vibrate(200)
         )}

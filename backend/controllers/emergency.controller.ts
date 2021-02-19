@@ -4,20 +4,19 @@ import { IEmergency } from '../interfaces/IEmergency';
 import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
 
 export default module.exports = {
-  createEmergency: async (emergencyLocation: IEmergencyLocation) => {
+  createEmergency: async (emergency: any) => {
     try {
-      const newEmergencyLocation = new EmergencyLocationSchema({
-        altitudeAccuracy: emergencyLocation.altitudeAccuracy,
-        altitude: emergencyLocation.altitude,
-        accuracy: emergencyLocation.accuracy,
-        heading: emergencyLocation.heading,
-        longitude: emergencyLocation.longitude,
-        latitude: emergencyLocation.latitude,
-        speed: emergencyLocation.speed,
-        userId: emergencyLocation.userId,
+      const newEmergencyLocation: any = new EmergencyLocationSchema({
+        altitudeAccuracy: emergency.location.altitudeAccuracy,
+        altitude: emergency.location.altitude,
+        accuracy: emergency.location.accuracy,
+        heading: emergency.location.heading,
+        longitude: emergency.location.longitude,
+        latitude: emergency.location.latitude,
+        speed: emergency.location.speed,
       });
 
-      const emergency = new EmergencySchema({
+      const emergencySchema = new EmergencySchema({
         active: true,
         bluntTrauma: false,
         hemmoraging: false,
@@ -29,13 +28,14 @@ export default module.exports = {
         other: false,
         responderOnScene: false,
         emergencyLocation: newEmergencyLocation,
+        userId: emergency.userId,
         //   responders: ref.schemaObject
       });
 
-      newEmergencyLocation.emergency = emergency._id;
+      newEmergencyLocation.emergency = emergencySchema._id;
       await newEmergencyLocation.save();
-      const newEmergency = await emergency.save();
-      return newEmergency;
+      const newEmergency = await emergencySchema.save();
+      return emergencySchema;
     } catch (err) {
       throw new Error(`Server Error, could not create new emergency: ${err}`);
     }

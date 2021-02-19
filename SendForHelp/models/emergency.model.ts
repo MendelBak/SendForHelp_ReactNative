@@ -1,3 +1,4 @@
+import {makeAutoObservable} from 'mobx';
 import EmergencyLocationModel from './emergencyLocation.model';
 import SymptomsModel from './symptoms.model';
 
@@ -12,11 +13,12 @@ export default class EmergencyModel {
   firstResponders: string[] = [];
 
   constructor(emergencyModel?: EmergencyModel) {
+    makeAutoObservable(this);
     if (emergencyModel) {
       this.active = emergencyModel.active;
       this.responderOnScene = emergencyModel.responderOnScene;
       this.userId = emergencyModel.userId;
-      this.symptoms = emergencyModel.symptoms;
+      // this.symptoms = emergencyModel.symptoms;
       this.location = emergencyModel.location;
       this.firstResponders = emergencyModel.firstResponders;
     }
