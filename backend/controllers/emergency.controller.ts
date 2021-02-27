@@ -2,7 +2,8 @@ import EmergencySchema from '../models/emergency.model';
 import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
 import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
-import SymptomsModel from '../models/symptoms.model';
+import SymptomsSchema from '../models/symptoms.model';
+import { ObjectId } from 'mongodb';
 
 export default module.exports = {
   createEmergency: async (emergency: any) => {
@@ -17,7 +18,7 @@ export default module.exports = {
         speed: emergency.emergencyLocation.speed,
       });
 
-      const newSymptoms = new SymptomsModel({
+      const newSymptoms = new SymptomsSchema({
         bluntTrauma: emergency.symptoms.bluntTrauma,
         choking: emergency.symptoms.choking,
         drowning: emergency.symptoms.drowning,
@@ -60,7 +61,9 @@ export default module.exports = {
 
   getAllEmergencies: async () => {
     try {
-      return await EmergencySchema.find().populate('emergencyLocation symptoms').exec();
+      return await EmergencySchema.find()
+        .populate('emergencyLocation symptoms')
+        .exec();
     } catch (err) {
       throw new Error(
         `Server Error, could not return list of emergencies: ${err}`
@@ -72,10 +75,31 @@ export default module.exports = {
     try {
       return await EmergencySchema.findOneAndUpdate(
         { _id: emergency._id },
-        emergency
+        { $set: { emergency: emergency } }
       );
     } catch (err) {
       throw new Error(`Server Error, could not update emergency: ${err}`);
+    }
+  },
+
+  updateSymtoms: async (emergency: IEmergency) => {
+    try {
+      console.log('emergency._id', emergency._id);
+      const response = await SymptomsSchema.findOneAndUpdate(
+        { _id: emergency._id },
+        { $set: { bluntTrauma: true } }
+      );
+      console.log('🚀 ~ updateSymtoms: ~ response', response);
+      const asdf = await SymptomsSchema.findById(emergency._id);
+      console.log('helaksdjhfalksdjf', asdf);
+      const test = await SymptomsSchema.findOneAndUpdate(
+        { _id: emergency._id },
+        emergency.symptoms
+      );
+      console.log('🚀 ~ updateSymtoms: ~ test', test);
+      return test;
+    } catch (err) {
+      throw new Error(`Server Error, could not update symptoms: ${err}`);
     }
   },
 

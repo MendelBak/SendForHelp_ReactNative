@@ -15,7 +15,6 @@ router.get('/', async (req, res, next) => {
 // Returning this model to get the _id that is created by mongoose
 router.post('/createEmergency', async (req, res, next) => {
   try {
-    console.log(req.body);
     const newEmergency = await emergencyController.createEmergency(req.body);
     res.status(201).send(newEmergency);
     // res.status(201).send();
@@ -38,9 +37,23 @@ router.get('/getEmergency/:id', async (req, res, next) => {
 
 router.put('/updateEmergency', async (req, res, next) => {
   try {
-    await emergencyController.updateEmergency(req.body);
+    console.log('emergency updates', req.body);
+    const response = await emergencyController.updateEmergency(req.body);
+    console.log("🚀 ~ router.put ~ response", response)
     res.status(201).send();
   } catch (err) {
+    console.log('Error updating emergency', err);
+    next(err);
+  }
+});
+
+router.put('/updateSymptoms', async (req, res, next) => {
+  try {
+    console.log('emergency updates', req.body);
+    await emergencyController.updateSymtoms(req.body);
+    res.status(201).send();
+  } catch (err) {
+    console.log('Error updating emergency', err);
     next(err);
   }
 });
@@ -50,6 +63,7 @@ router.put('/endEmergency', async (req, res, next) => {
     await emergencyController.endEmergency(req.body.id);
     res.status(201).send();
   } catch (err) {
+    console.log('Error when trying to end emergency', err);
     next(err);
   }
 });

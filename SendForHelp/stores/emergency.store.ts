@@ -9,6 +9,7 @@ import axios from 'axios';
 import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomsModel from '../models/symptoms.model';
 import EmergencyModel from '../models/emergency.model';
+import {SYMPTOMS} from '../common/enums';
 
 configure({
   enforceActions: 'always',
@@ -18,10 +19,10 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'http://9b8de97ed904.ngrok.io';
+const URI = 'http://eff22031788c.ngrok.io';
 
 export default class EmergencyStore {
-  private emergency: EmergencyModel = new EmergencyModel();
+  emergency: EmergencyModel = new EmergencyModel();
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
 
@@ -30,57 +31,39 @@ export default class EmergencyStore {
   }
 
   // HACK: This is kinda weird. GetCurrentPosition is not returning asyncronously and this is a hack. So I need to start to declare the emergency with the location request, and then initiate creation of an emergency.
-  initializeEmergency(): void {
-    this.getCurrentPosition();
+  async initializeEmergency(): Promise<void> {
+    await this.getCurrentPositionAndStartEmergency();
   }
 
-  async declareEmergency(position: GeolocationPosition) {
-    // console.log('🚀 ~ declareEmergency ~ testLocation ', testLocation);
-    const emergencyLocation = new EmergencyLocationModel(position);
-
-    const symptoms = new SymptomsModel();
-
+  declareEmergency(position: GeolocationPosition): void {
     this.emergency = new EmergencyModel({
       active: true,
       responderOnScene: false,
       firstResponders: [],
-      emergencyLocation: emergencyLocation,
-      symptoms: symptoms,
+      emergencyLocation: new EmergencyLocationModel(position),
+      symptoms: new SymptomsModel(),
       userId: '123',
     });
 
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
-      .then(
-        async (response) => (
-          await this.setEmergency(response.data),
-          console.log('response', response.data)
-        ),
-      )
+      .then((response) => this.setEmergency(response.data))
       .catch((error) => {
         console.error('There was an error creating an emergency event!', error);
       });
   }
 
   endEmergency(): void {
-    console.log('current emergency ', this.emergency);
     if (!this.emergency.active) {
       return;
     }
+
     this.emergency.active = false;
-    // TODO: need to add real ID when I create users.
-    this.removeFirstResponder('123');
-    // TODO: Probably need to save these for historica; reporting purposes. Just clear them for independent events but save overall.
-    this.clearLocation();
-    this.clearSymptoms();
 
     axios
-      .put(`${URI}/emergency/endEmergency`, this.emergency.id)
-      .then(async (response) =>
-        console.log('response of end emergency', response),
-      )
+      .put(`${URI}/emergency/endEmergency`, {id: this.emergency._id})
       .catch((error) => {
-        console.error('There was an error creating an emergency event!', error);
+        console.error('Error while ending an emergency event.', error);
       });
   }
 
@@ -88,7 +71,7 @@ export default class EmergencyStore {
     return this.emergency.active;
   }
 
-  async getEmergencies() {
+  async getEmergencies(): Promise<[EmergencyModel]> {
     const emergencies = axios
       .get(`${URI}/emergency`)
       .then(async (response) => {
@@ -114,12 +97,13 @@ export default class EmergencyStore {
     // );
   }
 
-  get getFirstResponders() {
+  get getFirstResponders(): string[] {
     return this.emergency.firstResponders;
   }
 
   //#region location
-  async getCurrentPosition() {
+  // This function does two things because the Geolocation.getCurrentPosition function is not returning its values asyncronously, so this is the best way I found to pass the data along, without having a race condition.
+  async getCurrentPositionAndStartEmergency(): Promise<void> {
     if (Platform.OS === 'android') {
       await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -151,8 +135,8 @@ export default class EmergencyStore {
     );
   }
 
-  setEmergency(emergency: EmergencyModel) {
-    this.emergency = emergency;
+  setEmergency(emergency: EmergencyModel): void {
+    this.emergency._id = emergency._id;
   }
 
   setEmergencyLocation(position: GeolocationPosition): void {
@@ -162,23 +146,25 @@ export default class EmergencyStore {
   get getEmergencyLocation(): EmergencyLocationModel {
     return this.emergency.emergencyLocation;
   }
-
-  clearLocation(): void {
-    this.emergency.emergencyLocation = new EmergencyLocationModel();
-  }
   //#endregion location
 
   //#region symptoms
-  updateSymptoms(symptoms: SymptomsModel) {
-    this.emergency.symptoms = new SymptomsModel(symptoms);
+  updateSymptom(symptom: SYMPTOMS): void {
+    this.emergency.symptoms[symptom] = !this.emergency.symptoms[symptom];
+  }
+
+  updateSymptoms(): void {
+    console.log('before updating emergency with new symptoms', this.emergency);
+
+    axios
+      .put(`${URI}/emergency/updateSymptoms`, this.emergency)
+      .catch((error) => {
+        console.error('Error while updating emergency symptoms.', error);
+      });
   }
 
   get getSymptoms(): SymptomsModel {
     return this.emergency.symptoms;
-  }
-
-  clearSymptoms(): void {
-    this.emergency.symptoms = new SymptomsModel();
   }
   //#endregion symptoms
 }

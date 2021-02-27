@@ -6,61 +6,62 @@ import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
 import {EMERGENCY_STORE} from '../stores/storesKeys';
 import SymptomsModel from '../models/symptoms.model';
+import {SYMPTOMS} from '../common/enums';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const SymptomsScreen = observer(({navigation}: {navigation: any}) => {
-  const symptoms: SymptomsModel = new SymptomsModel();
+  const {emergency, getSymptoms} = emergencyStore;
 
   return (
     <View style={styles.container}>
       <View style={styles.card__container}>
         <Pressable
           onPress={() => (
-            Vibration.vibrate(20), (symptoms.choking = !symptoms.choking)
+            Vibration.vibrate(50),
+            emergencyStore.updateSymptom(SYMPTOMS.CHOKING)
           )}
-          style={styles.card}>
+          style={getSymptoms.choking ? styles.selected_card : styles.card}>
           <Text>CHOKING</Text>
         </Pressable>
 
         <Pressable
           onPress={() => (
-            Vibration.vibrate(20), (symptoms.drowning = !symptoms.drowning)
+            Vibration.vibrate(50),
+            emergencyStore.updateSymptom(SYMPTOMS.DROWNING)
           )}
-          style={styles.card}>
+          style={getSymptoms.drowning ? styles.selected_card : styles.card}>
           <Text>DROWING</Text>
         </Pressable>
 
         <Pressable
           onPress={() => (
-            Vibration.vibrate(20),
-            (symptoms.hemmoraging = !symptoms.hemmoraging)
+            Vibration.vibrate(50),
+            emergencyStore.updateSymptom(SYMPTOMS.HEMMORAGING)
           )}
-          style={styles.card}>
+          style={getSymptoms.hemmoraging ? styles.selected_card : styles.card}>
           <Text>BLEEDING</Text>
         </Pressable>
 
         <Pressable
           onPress={() => (
-            Vibration.vibrate(20),
-            (symptoms.bluntTrauma = !symptoms.bluntTrauma)
+            Vibration.vibrate(50),
+            emergencyStore.updateSymptom(SYMPTOMS.BLUNT_TRAUMA)
           )}
-          style={styles.card}>
+          style={getSymptoms.bluntTrauma ? styles.selected_card : styles.card}>
           <Text>HIT BY HEAVY OBJECT</Text>
         </Pressable>
 
         <Pressable
-          onPress={() => (
-            Vibration.vibrate(20), (symptoms.other = !symptoms.other)
-          )}
-          style={styles.card}>
+          onPress={() => emergencyStore.updateSymptom(SYMPTOMS.OTHER)}
+          style={getSymptoms.other ? styles.selected_card : styles.card}>
           <Text>OTHER</Text>
         </Pressable>
 
         <Pressable
           onPress={() => (
-            Vibration.vibrate(20),
-            emergencyStore.updateSymptoms(symptoms),
+            Vibration.vibrate(50),
+            emergencyStore.updateSymptoms(),
             navigation.navigate('First Responder')
           )}
           style={styles.card}>
@@ -92,6 +93,16 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: 'grey',
+    height: '20%',
+    width: '50%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: 'red',
+    marginBottom: 100,
+  },
+  selected_card: {
+    backgroundColor: 'green',
     height: '20%',
     width: '50%',
     alignItems: 'center',

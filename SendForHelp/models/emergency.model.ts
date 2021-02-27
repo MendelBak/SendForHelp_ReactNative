@@ -3,7 +3,7 @@ import EmergencyLocationModel from './emergencyLocation.model';
 import SymptomsModel from './symptoms.model';
 
 export default class EmergencyModel {
-  id?: string;
+  _id?: string;
   active: boolean = false;
   responderOnScene: boolean = false;
   // User who initated the emergency
@@ -16,11 +16,11 @@ export default class EmergencyModel {
   constructor(emergencyModel?: EmergencyModel) {
     makeAutoObservable(this);
     if (emergencyModel) {
-      this.id = emergencyModel?.id;
+      this._id = emergencyModel?._id;
       this.active = emergencyModel.active;
       this.responderOnScene = emergencyModel.responderOnScene;
       this.userId = emergencyModel.userId;
-      // this.symptoms = emergencyModel.symptoms;
+      this.symptoms = emergencyModel.symptoms;
       this.emergencyLocation = emergencyModel.emergencyLocation;
       this.firstResponders = emergencyModel.firstResponders;
     }
