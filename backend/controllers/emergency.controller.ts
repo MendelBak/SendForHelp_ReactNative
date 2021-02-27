@@ -2,6 +2,7 @@ import EmergencySchema from '../models/emergency.model';
 import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
 import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
+import SymptomsModel from '../models/symptoms.model';
 
 export default module.exports = {
   createEmergency: async (emergency: any) => {
@@ -16,26 +17,30 @@ export default module.exports = {
         speed: emergency.emergencyLocation.speed,
       });
 
+      const newSymptoms = new SymptomsModel({
+        bluntTrauma: emergency.symptoms.bluntTrauma,
+        choking: emergency.symptoms.choking,
+        drowning: emergency.symptoms.drowning,
+        hemmoraging: emergency.symptoms.hemmoraging,
+        other: emergency.symptoms.other,
+      });
+
       const emergencySchema = new EmergencySchema({
         active: true,
-        bluntTrauma: false,
-        hemmoraging: false,
-        choking: false,
-        drowning: false,
-        stroke: false,
-        heartRelated: false,
-        allergyRelated: false,
-        other: false,
-        responderOnScene: false,
-        emergencyLocation: newEmergencyLocation,
         userId: emergency.userId,
+        responderOnScene: false,
+        symptoms: newSymptoms,
+        emergencyLocation: newEmergencyLocation,
         //   responders: ref.schemaObject
       });
 
       newEmergencyLocation.emergency = emergencySchema._id;
+      newSymptoms.emergency = emergencySchema._id;
+
+      await newSymptoms.save();
       await newEmergencyLocation.save();
       const newEmergency = await emergencySchema.save();
-      return emergencySchema;
+      return newEmergency;
     } catch (err) {
       throw new Error(`Server Error, could not create new emergency: ${err}`);
     }
@@ -44,18 +49,18 @@ export default module.exports = {
   getEmergency: async (id: string) => {
     try {
       return await EmergencySchema.findOne({ _id: id }).populate(
-        'emergencyLocation'
+        'emergencyLocation symptoms'
       );
     } catch (err) {
       throw new Error(
-        `Server Error, could not return emergency of ID = ${id} : ${err}`
+        `Server Error, could not return emergency: ID = ${id} : ${err}`
       );
     }
   },
 
   getAllEmergencies: async () => {
     try {
-      return await EmergencySchema.find().populate('emergencyLocation').exec();
+      return await EmergencySchema.find().populate('emergencyLocation symptoms').exec();
     } catch (err) {
       throw new Error(
         `Server Error, could not return list of emergencies: ${err}`
@@ -76,9 +81,13 @@ export default module.exports = {
 
   // End emergency by setting active status to false;
   endEmergency: async (id: string) => {
-    return await EmergencySchema.findOneAndUpdate(
-      { _id: id },
-      { $set: { active: false } }
-    );
+    try {
+      return await EmergencySchema.findOneAndUpdate(
+        { _id: id },
+        { $set: { active: false } }
+      );
+    } catch (err) {
+      throw new Error(`Server Error, could not end emergency: ${err}`);
+    }
   },
 };
