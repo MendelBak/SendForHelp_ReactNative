@@ -15,9 +15,9 @@ const PORT = 8000;
 import cors from 'cors';
 app.use(cors());
 
-app.all("/*", (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+app.all('/*', (req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
   next();
 });
 
@@ -33,12 +33,16 @@ app.use('/emergencyLocation', emergencyLocationRoute);
 // app.use('/user', userRoute);
 
 app.listen(PORT, () => {
-  // console.log(uri);
-  console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+  try {
+    // console.log(uri);
+    console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 
-  mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  var db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    var db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+  } catch (err) {
+    console.log('error starting the application ', err);
+  }
 });
 
 // module.exports = app;
