@@ -50,7 +50,7 @@ router.put('/updateEmergency', async (req, res, next) => {
 router.put('/updateSymptoms', async (req, res, next) => {
   try {
     console.log('emergency updates', req.body);
-    await emergencyController.updateSymtoms(req.body);
+    await emergencyController.updateSymptoms(req.body);
     res.status(201).send();
   } catch (err) {
     console.log('Error updating emergency', err);

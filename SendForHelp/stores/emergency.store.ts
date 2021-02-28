@@ -19,7 +19,7 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'http://eff22031788c.ngrok.io';
+const URI = 'http://d28c8a18b568.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();

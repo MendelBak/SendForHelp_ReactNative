@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import { IEmergencyLocation } from './IEmergencyLocation';
-import { ISymptoms } from './ISymptoms';
+import { ISymptom } from './ISymptom';
 
 export interface IEmergency extends mongoose.Document {
   active: boolean;
   userId: string;
   responderOnScene: boolean;
-  symptoms: ISymptoms;
+  symptoms: ISymptom;
   emergencyLocation: IEmergencyLocation;
   // responder: [],
 }

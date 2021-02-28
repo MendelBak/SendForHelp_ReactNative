@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-export interface ISymptoms extends mongoose.Document {
+export interface ISymptom extends mongoose.Document {
   bluntTrauma: boolean;
   hemmoraging: boolean;
   choking: boolean;

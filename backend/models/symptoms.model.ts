@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
-import { ISymptoms } from '../interfaces/ISymptoms';
+import { ISymptom } from '../interfaces/ISymptom';
 
-const SymptomsSchema = new Schema(
+const SymptomSchema = new Schema(
   {
     bluntTrauma: { type: Boolean, required: true },
     choking: { type: Boolean, required: true },
@@ -17,4 +17,4 @@ const SymptomsSchema = new Schema(
   { timestamps: true, minimize: false }
 );
 
-export default mongoose.model<ISymptoms>('Symptoms', SymptomsSchema);
+export default mongoose.model<ISymptom>('Symptom', SymptomSchema);

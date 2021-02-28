@@ -2,8 +2,12 @@ import EmergencySchema from '../models/emergency.model';
 import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
 import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
-import SymptomsSchema from '../models/symptoms.model';
+import SymptomSchema from '../models/symptoms.model';
 import { ObjectId } from 'mongodb';
+const mongoose = require('mongoose');
+
+// Prints the MongoDB query being used.
+mongoose.set('debug', true);
 
 export default module.exports = {
   createEmergency: async (emergency: any) => {
@@ -18,7 +22,7 @@ export default module.exports = {
         speed: emergency.emergencyLocation.speed,
       });
 
-      const newSymptoms = new SymptomsSchema({
+      const newSymptoms = new SymptomSchema({
         bluntTrauma: emergency.symptoms.bluntTrauma,
         choking: emergency.symptoms.choking,
         drowning: emergency.symptoms.drowning,
@@ -82,22 +86,16 @@ export default module.exports = {
     }
   },
 
-  updateSymtoms: async (emergency: IEmergency) => {
+  updateSymptoms: async (emergency: IEmergency) => {
     try {
       console.log('emergency._id', emergency._id);
-      const response = await SymptomsSchema.findOneAndUpdate(
-        { _id: emergency._id },
-        { $set: { bluntTrauma: true } }
+      const test = await SymptomSchema.findOneAndUpdate(
+        { emergency: emergency._id },
+        emergency.symptoms,
+        { new: true }
       );
-      console.log('🚀 ~ updateSymtoms: ~ response', response);
-      const asdf = await SymptomsSchema.findById(emergency._id);
-      console.log('helaksdjhfalksdjf', asdf);
-      const test = await SymptomsSchema.findOneAndUpdate(
-        { _id: emergency._id },
-        emergency.symptoms
-      );
-      console.log('🚀 ~ updateSymtoms: ~ test', test);
-      return test;
+      console.log('🚀 ~ updateSymtoms: ~ asdf', test);
+      return;
     } catch (err) {
       throw new Error(`Server Error, could not update symptoms: ${err}`);
     }
@@ -108,7 +106,8 @@ export default module.exports = {
     try {
       return await EmergencySchema.findOneAndUpdate(
         { _id: id },
-        { $set: { active: false } }
+        { $set: { active: false } },
+        { new: true }
       );
     } catch (err) {
       throw new Error(`Server Error, could not end emergency: ${err}`);
