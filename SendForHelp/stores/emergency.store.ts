@@ -7,7 +7,7 @@ import axios from 'axios';
 
 // Internal
 import EmergencyLocationModel from '../models/emergencyLocation.model';
-import SymptomsModel from '../models/symptoms.model';
+import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
 import {SYMPTOMS} from '../common/enums';
 
@@ -19,7 +19,7 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'http://d28c8a18b568.ngrok.io';
+const URI = 'http://bb0b3fdb8c88.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -41,7 +41,7 @@ export default class EmergencyStore {
       responderOnScene: false,
       firstResponders: [],
       emergencyLocation: new EmergencyLocationModel(position),
-      symptoms: new SymptomsModel(),
+      symptom: new SymptomModel(),
       userId: '123',
     });
 
@@ -150,7 +150,7 @@ export default class EmergencyStore {
 
   //#region symptoms
   updateSymptom(symptom: SYMPTOMS): void {
-    this.emergency.symptoms[symptom] = !this.emergency.symptoms[symptom];
+    this.emergency.symptom[symptom] = !this.emergency.symptom[symptom];
   }
 
   updateSymptoms(): void {
@@ -163,8 +163,8 @@ export default class EmergencyStore {
       });
   }
 
-  get getSymptoms(): SymptomsModel {
-    return this.emergency.symptoms;
+  get getSymptoms(): SymptomModel {
+    return this.emergency.symptom;
   }
   //#endregion symptoms
 }

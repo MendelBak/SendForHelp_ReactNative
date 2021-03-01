@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 import EmergencyLocationModel from './emergencyLocation.model';
-import SymptomsModel from './symptoms.model';
+import SymptomModel from './symptom.model';
 
 export default class EmergencyModel {
   _id?: string;
@@ -8,7 +8,7 @@ export default class EmergencyModel {
   responderOnScene: boolean = false;
   // User who initated the emergency
   userId: string = '';
-  symptoms: SymptomsModel = new SymptomsModel();
+  symptom: SymptomModel = new SymptomModel();
   emergencyLocation: EmergencyLocationModel = new EmergencyLocationModel();
   // Should contain userId of first responders.
   firstResponders: string[] = [];
@@ -20,7 +20,7 @@ export default class EmergencyModel {
       this.active = emergencyModel.active;
       this.responderOnScene = emergencyModel.responderOnScene;
       this.userId = emergencyModel.userId;
-      this.symptoms = emergencyModel.symptoms;
+      this.symptom = emergencyModel.symptom;
       this.emergencyLocation = emergencyModel.emergencyLocation;
       this.firstResponders = emergencyModel.firstResponders;
     }

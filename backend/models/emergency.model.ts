@@ -13,10 +13,10 @@ const EmergencySchema = new Schema(
       required: true,
       ref: 'EmergencyLocation',
     },
-    symptoms: {
+    symptom: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Symptoms',
+      ref: 'Symptom',
     },
     // responders: { type: Object.ref, required: false },
   },

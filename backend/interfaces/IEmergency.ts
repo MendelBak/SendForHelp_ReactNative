@@ -6,7 +6,7 @@ export interface IEmergency extends mongoose.Document {
   active: boolean;
   userId: string;
   responderOnScene: boolean;
-  symptoms: ISymptom;
+  symptom: ISymptom;
   emergencyLocation: IEmergencyLocation;
   // responder: [],
 }

@@ -5,7 +5,7 @@ import {Pressable, StyleSheet, Vibration, Text, View} from 'react-native';
 import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
 import {EMERGENCY_STORE} from '../stores/storesKeys';
-import SymptomsModel from '../models/symptoms.model';
+import SymptomModel from '../models/symptom.model';
 import {SYMPTOMS} from '../common/enums';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
@@ -53,7 +53,9 @@ const SymptomsScreen = observer(({navigation}: {navigation: any}) => {
         </Pressable>
 
         <Pressable
-          onPress={() => emergencyStore.updateSymptom(SYMPTOMS.OTHER)}
+          onPress={() => (
+            Vibration.vibrate(50), emergencyStore.updateSymptom(SYMPTOMS.OTHER)
+          )}
           style={getSymptoms.other ? styles.selected_card : styles.card}>
           <Text>OTHER</Text>
         </Pressable>

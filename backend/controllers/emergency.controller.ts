@@ -2,7 +2,7 @@ import EmergencySchema from '../models/emergency.model';
 import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
 import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
-import SymptomSchema from '../models/symptoms.model';
+import SymptomSchema from '../models/symptom.model';
 import { ObjectId } from 'mongodb';
 const mongoose = require('mongoose');
 
@@ -22,27 +22,27 @@ export default module.exports = {
         speed: emergency.emergencyLocation.speed,
       });
 
-      const newSymptoms = new SymptomSchema({
-        bluntTrauma: emergency.symptoms.bluntTrauma,
-        choking: emergency.symptoms.choking,
-        drowning: emergency.symptoms.drowning,
-        hemmoraging: emergency.symptoms.hemmoraging,
-        other: emergency.symptoms.other,
+      const newSymptom = new SymptomSchema({
+        bluntTrauma: emergency.symptom.bluntTrauma,
+        choking: emergency.symptom.choking,
+        drowning: emergency.symptom.drowning,
+        hemmoraging: emergency.symptom.hemmoraging,
+        other: emergency.symptom.other,
       });
 
       const emergencySchema = new EmergencySchema({
         active: true,
         userId: emergency.userId,
         responderOnScene: false,
-        symptoms: newSymptoms,
+        symptom: newSymptom,
         emergencyLocation: newEmergencyLocation,
         //   responders: ref.schemaObject
       });
 
       newEmergencyLocation.emergency = emergencySchema._id;
-      newSymptoms.emergency = emergencySchema._id;
+      newSymptom.emergency = emergencySchema._id;
 
-      await newSymptoms.save();
+      await newSymptom.save();
       await newEmergencyLocation.save();
       const newEmergency = await emergencySchema.save();
       return newEmergency;
@@ -54,7 +54,7 @@ export default module.exports = {
   getEmergency: async (id: string) => {
     try {
       return await EmergencySchema.findOne({ _id: id }).populate(
-        'emergencyLocation symptoms'
+        'emergencyLocation symptom'
       );
     } catch (err) {
       throw new Error(
@@ -66,7 +66,7 @@ export default module.exports = {
   getAllEmergencies: async () => {
     try {
       return await EmergencySchema.find()
-        .populate('emergencyLocation symptoms')
+        .populate('emergencyLocation symptom')
         .exec();
     } catch (err) {
       throw new Error(
@@ -79,7 +79,8 @@ export default module.exports = {
     try {
       return await EmergencySchema.findOneAndUpdate(
         { _id: emergency._id },
-        { $set: { emergency: emergency } }
+        { $set: { emergency: emergency } },
+        { new: true }
       );
     } catch (err) {
       throw new Error(`Server Error, could not update emergency: ${err}`);
@@ -91,10 +92,16 @@ export default module.exports = {
       console.log('emergency._id', emergency._id);
       const test = await SymptomSchema.findOneAndUpdate(
         { emergency: emergency._id },
-        emergency.symptoms,
+        emergency.symptom,
         { new: true }
       );
       console.log('🚀 ~ updateSymtoms: ~ asdf', test);
+      console.log(
+        'newly updated emergency',
+        await EmergencySchema.findOne({ _id: emergency._id }).populate(
+          'symptom emergencyLocation'
+        )
+      );
       return;
     } catch (err) {
       throw new Error(`Server Error, could not update symptoms: ${err}`);
