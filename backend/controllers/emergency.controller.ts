@@ -75,11 +75,13 @@ export default module.exports = {
     }
   },
 
+  //  Updates emergency collection.
+  // TODO: Does this also update the sub collections (emergencyLocation & sympmtom)? I think not but need to verify.
   updateEmergency: async (emergency: IEmergency) => {
     try {
       return await EmergencySchema.findOneAndUpdate(
         { _id: emergency._id },
-        { $set: { emergency: emergency } },
+        emergency,
         { new: true }
       );
     } catch (err) {
@@ -90,25 +92,16 @@ export default module.exports = {
   updateSymptoms: async (emergency: IEmergency) => {
     try {
       console.log('emergency._id', emergency._id);
-      const test = await SymptomSchema.findOneAndUpdate(
+      return await SymptomSchema.findOneAndUpdate(
         { emergency: emergency._id },
         emergency.symptom,
         { new: true }
       );
-      console.log('🚀 ~ updateSymtoms: ~ asdf', test);
-      console.log(
-        'newly updated emergency',
-        await EmergencySchema.findOne({ _id: emergency._id }).populate(
-          'symptom emergencyLocation'
-        )
-      );
-      return;
     } catch (err) {
       throw new Error(`Server Error, could not update symptoms: ${err}`);
     }
   },
 
-  // End emergency by setting active status to false;
   endEmergency: async (id: string) => {
     try {
       return await EmergencySchema.findOneAndUpdate(

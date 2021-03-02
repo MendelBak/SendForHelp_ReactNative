@@ -1,5 +1,3 @@
-import {autorun, isComputed, isObservable, isObservableObject} from 'mobx';
-import {observer} from 'mobx-react-lite';
 import * as React from 'react';
 import {
   Linking,
@@ -8,7 +6,9 @@ import {
   Vibration,
   Text,
   View,
+  Button,
 } from 'react-native';
+import {observer} from 'mobx-react-lite';
 
 import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
@@ -18,10 +18,10 @@ const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const FirstResponderScreen = observer(() => {
   const {
-    getFirstResponders,
     getEmergencyLocation,
     getIsEmergency,
     getSymptoms,
+    getFirstResponders,
   } = emergencyStore;
 
   return (
@@ -43,10 +43,12 @@ const FirstResponderScreen = observer(() => {
         disabled={
           !getIsEmergency ||
           !getEmergencyLocation.latitude ||
-          !getEmergencyLocation.longitude
+          !getEmergencyLocation.longitude ||
+          // TODO: Replace this with the ID of the current user instead of this fake userID.
+          getFirstResponders.includes('Mendel')
         }
         onPress={() => (
-          emergencyStore.addFirstResponder('Mendel'),
+          emergencyStore.addFirstResponder('123'),
           Vibration.vibrate(200),
           Linking.openURL(
             `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
@@ -73,6 +75,16 @@ const FirstResponderScreen = observer(() => {
           <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
           <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
           <Text>-- Other: {getSymptoms.other.toString()}</Text>
+        </View>
+      ) : null}
+
+      {getIsEmergency && getFirstResponders.length > 0 ? (
+        <View style={{marginTop: 15}}>
+          <Button
+            title="I Can't Help Anymore"
+            // TODO: Need to replace this fake ID with real ID.
+            onPress={() => emergencyStore.removeFirstResponder('123')}
+          />
         </View>
       ) : null}
     </View>

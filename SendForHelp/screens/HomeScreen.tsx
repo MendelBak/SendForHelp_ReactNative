@@ -10,18 +10,6 @@ import {
   StyleSheet,
 } from 'react-native';
 
-// export default function HomeScreen({navigation}: {navigation: any}) {
-//   return (
-// <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-//   <Text>Home!</Text>
-//   <Button
-//     title="Go to Settings"
-//     onPress={() => navigation.navigate('Details')}
-//   />
-// </View>
-//   );
-// }
-
 // Internal
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
@@ -48,7 +36,6 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         disabled={emergencyStore.getIsEmergency}
         onPress={() => (
           emergencyStore.initializeEmergency(),
-          // emergencyStore.declareEmergency(),
           navigation.navigate('Symptoms'),
           Vibration.vibrate(200)
         )}

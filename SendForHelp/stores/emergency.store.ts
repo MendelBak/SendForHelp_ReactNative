@@ -19,7 +19,7 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'http://bb0b3fdb8c88.ngrok.io';
+const URI = 'http://f751bdd2abf0.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -77,10 +77,14 @@ export default class EmergencyStore {
       .then(async (response) => {
         return await response.data;
       })
-      .catch(() => {
-        console.log('error');
+      .catch((err) => {
+        console.log('Error getting emergencies', err);
       });
     return emergencies;
+  }
+
+  get getFirstResponders(): string[] {
+    return this.emergency.firstResponders;
   }
 
   addFirstResponder(id: string): void {
@@ -88,17 +92,12 @@ export default class EmergencyStore {
   }
 
   removeFirstResponder(id: string): void {
-    // TODO: This works (I think). Commented out for ease of testing.
-    // this.emergency.firstResponders.splice(
-    //   this.emergency.firstResponders.findIndex(
-    //     (responderId) => responderId === id,
-    //   ),
-    //   1,
-    // );
-  }
-
-  get getFirstResponders(): string[] {
-    return this.emergency.firstResponders;
+    this.emergency.firstResponders.splice(
+      this.emergency.firstResponders.findIndex(
+        (responderId) => responderId === id,
+      ),
+      1,
+    );
   }
 
   //#region location
@@ -154,8 +153,6 @@ export default class EmergencyStore {
   }
 
   updateSymptoms(): void {
-    console.log('before updating emergency with new symptoms', this.emergency);
-
     axios
       .put(`${URI}/emergency/updateSymptoms`, this.emergency)
       .catch((error) => {
