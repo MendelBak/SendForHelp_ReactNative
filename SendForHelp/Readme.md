@@ -21,14 +21,17 @@ Option for rescuer to indicate that they need more/more advanced rescuers or res
 Indicate if rescuers have equipment matching the emergency? (TQ or pressure bandage for hemmoraging. Defibrilator for heart attack).
 Easy to follow animations on screen for bystanders for CPR/ bleeding prevention, etc.
 Wider alert range in suburban/rural areas. Smaller range in urban areas. Increase range if no rescuers found.
+The first firstResponder is in charge of the scene. Need to determine who that is (first to accept request or first on scene?). Save that user for legal purposes. (Can just keep PrimaryResponder as first in the array instead of making a special attribute, probably.)
 Override DO NOT DISTURB mode on responders phones.
 
 ## General TODO
 Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
 Handle if users don't turn on GPS during call event.
 ## Deployment TODO
+Check TODO Tree for comments to self.
 API key for backend requests.
 Deploy backend to AWS/Google
+Make sure that hardcoded IDs are replaced with real user IDs.
 
 ## Potential Monetization Strategies
 Sell swag.
