@@ -83,7 +83,9 @@ const FirstResponderScreen = observer(() => {
           <Button
             title="I Can't Help Anymore"
             // TODO: Need to replace this fake ID with real ID.
-            onPress={() => emergencyStore.removeFirstResponder('123')}
+            onPress={() => (
+              emergencyStore.removeFirstResponder('123'), Vibration.vibrate(50)
+            )}
           />
         </View>
       ) : null}

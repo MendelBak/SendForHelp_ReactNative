@@ -19,7 +19,7 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'http://f751bdd2abf0.ngrok.io';
+const URI = 'https://4def8561505d.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -98,6 +98,7 @@ export default class EmergencyStore {
       ),
       1,
     );
+    // TODO: Need to update the emergency with the newly modified rescuers (after that is built).
   }
 
   //#region location

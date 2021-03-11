@@ -9,11 +9,11 @@ admin.initializeApp({
 });
 
 export default module.exports = {
-  sendPushNotificationToAllDevices: async () => {
+  sendEmergencyTopicPushoNotification: async () => {
     var message = {
       notification: {
-        title: 'Message from node',
-        body: 'Oh Hi, Hey there, Hello!',
+        title: 'Emergency Reported',
+        body: 'There is an emergency in your area!',
       },
       topic: 'emergency',
     };

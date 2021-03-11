@@ -1,7 +1,7 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {View, Button, Text, PushNotificationIOS} from 'react-native';
+import {View, Button, Text, PushNotificationIOS, Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -35,8 +35,12 @@ PushNotification.configure({
     console.log('TOKEN:', token);
   },
   onNotification: function (notification) {
+    if(notification.foreground)
+    {
+      // Alert.alert(JSON.stringify(notification.message));
+    }
     console.log('NOTIFICATION:', notification);
-    notification.finish(PushNotificationIOS.FetchResult.NoData);
+    // notification.finish(PushNotificationIOS.FetchResult.NoData);
   },
   permissions: {
     alert: true,

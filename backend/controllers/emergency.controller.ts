@@ -41,8 +41,7 @@ export default module.exports = {
       await newSymptom.save();
       await newEmergencyLocation.save();
       const newEmergency = await emergencySchema.save();
-      console.log('right before sending push notification')
-      await NotificationController.sendPushNotificationToAllDevices();
+      await NotificationController.sendEmergencyTopicPushoNotification();
       return newEmergency;
     } catch (err) {
       throw new Error(`Server Error, could not create new emergency: ${err}`);
