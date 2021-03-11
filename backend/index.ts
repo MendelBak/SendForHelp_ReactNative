@@ -34,7 +34,6 @@ app.use('/emergencyLocation', emergencyLocationRoute);
 
 app.listen(PORT, () => {
   try {
-    // console.log(uri);
     console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });

@@ -1,7 +1,7 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {View, Button, Text} from 'react-native';
+import {View, Button, Text, PushNotificationIOS} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -17,27 +17,35 @@ import DetailsScreen from './screens/LocationDetails';
 import FirstResponderScreen from './screens/FirstResponderScreen';
 import SymptomsScreen from './screens/SymptomsScreen';
 import LocationDetailsScreen from './screens/LocationDetails';
+import PushNotification from 'react-native-push-notification';
 
-// function HomeScreen({navigation}) {
-//   return (
-//     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-//       <Text>Home!</Text>
-//       <Button
-//         title="Go to Settings"
-//         onPress={() => navigation.navigate('Settings')}
-//       />
-//     </View>
-//   );
-// }
+// Function for Local Notification
+const localPushNotification = () => {
+  PushNotification.localNotification({
+    title: 'Local Notification',
+    message: 'This is a local notification example',
+  });
+};
 
-// function SettingsScreen({navigation}: {navigation: any}) {
-//   return (
-//     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-//       <Text>Settings!</Text>
-//       <Button title="Go to Home" onPress={() => navigation.navigate('Home')} />
-//     </View>
-//   );
-// }
+PushNotification.subscribeToTopic('emergency');
+
+//Push Notification configuration
+PushNotification.configure({
+  onRegister: function (token) {
+    console.log('TOKEN:', token);
+  },
+  onNotification: function (notification) {
+    console.log('NOTIFICATION:', notification);
+    notification.finish(PushNotificationIOS.FetchResult.NoData);
+  },
+  permissions: {
+    alert: true,
+    badge: true,
+    sound: true,
+  },
+  popInitialNotification: true,
+  requestPermissions: true,
+});
 
 export default function App() {
   return (

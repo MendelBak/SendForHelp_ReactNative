@@ -1,13 +1,9 @@
 import EmergencySchema from '../models/emergency.model';
 import EmergencyLocationSchema from '../models/emergencyLocation.model';
 import { IEmergency } from '../interfaces/IEmergency';
-import { IEmergencyLocation } from '../interfaces/IEmergencyLocation';
 import SymptomSchema from '../models/symptom.model';
-import { ObjectId } from 'mongodb';
 const mongoose = require('mongoose');
-
-// Prints the MongoDB query being used.
-mongoose.set('debug', true);
+import NotificationController from './notification.controller';
 
 export default module.exports = {
   createEmergency: async (emergency: any) => {
@@ -45,6 +41,8 @@ export default module.exports = {
       await newSymptom.save();
       await newEmergencyLocation.save();
       const newEmergency = await emergencySchema.save();
+      console.log('right before sending push notification')
+      await NotificationController.sendPushNotificationToAllDevices();
       return newEmergency;
     } catch (err) {
       throw new Error(`Server Error, could not create new emergency: ${err}`);
