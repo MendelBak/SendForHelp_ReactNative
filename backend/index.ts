@@ -4,15 +4,21 @@ import bodyParser from 'body-parser';
 
 // Internal
 import { uri } from '../backend/config/dbConsts';
+import cookieSession from 'cookie-session';
+// require('./authentication/passport');
+import cors from 'cors';
+import keys from './config/keys';
+
 import emergencyRoute from './api/routes/emergency.route';
 import emergencyLocationRoute from './api/routes/emergencyLocation.route';
+import './services/passport';
+import passport from 'passport';
 
 module.exports.mongoose = mongoose;
 
 const app = express();
 const PORT = 8000;
 
-import cors from 'cors';
 app.use(cors());
 
 app.all('/*', (req, res, next) => {
@@ -25,9 +31,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
+app.use(
+  cookieSession({
+    // milliseconds of a day
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [keys.session.cookieKey],
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Defines the routes used.
 app.use('/emergency', emergencyRoute);
 app.use('/emergencyLocation', emergencyLocationRoute);
+require('./api/routes/auth.route')(app);
 // app.use('/location', locationRoute);
 // app.use('/medicalHistory', medicalHistoryRoute);
 // app.use('/user', userRoute);
