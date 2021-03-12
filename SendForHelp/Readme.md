@@ -31,8 +31,10 @@ Handle if users don't turn on GPS during call event.
 Check TODO Tree for comments to self.
 Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't use the key stored in the codebase. 
 API key for backend requests.
-Deploy backend to AWS/Google
+Deploy backend to AWS EC2 or Kubernetes (need Docker for Kubernetes).
+Add SSL/TLS.
 Make sure that hardcoded IDs are replaced with real user IDs.
+Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
 
 ## Potential Monetization Strategies
 Sell swag.
