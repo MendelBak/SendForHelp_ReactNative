@@ -16,12 +16,13 @@ Save emergency contacts and call/email/text if emergency is underway. (How to kn
 Users within a 20 meter radius have push notification / popup on their (even locked) phone screens, requester scans the code for the victim which alerts his emergency contacts and display allergies and other important information (medical preferences, medical contacts, relevant health issues).
 Auto-engage audio and video recordings from requesters phone, for use by police (potential legal/privacy issues).   
 Responders need to upload certifications and be verified by admins. 
-Two tiers of rescuers? Basic (EMT, nurses) and Advanced (Doctors, Paramedics). Would help Advanced rescuer to join if only Basic's were answering. 
+Three tiers of rescuers? Basic (Non-licensed citizens who have basic First Aid skills). Level 2 Rescuer (EMT, nurses) and Advanced Rescuer (Doctors, Paramedics). Show level of rescuer responding so that Advanced rescuer will join if only Basic Rescuer were answering. 
 Option for rescuer to indicate that they need more/more advanced rescuers or rescuers with specific equipment to assist.
 Indicate if rescuers have equipment matching the emergency? (TQ or pressure bandage for hemmoraging. Defibrilator for heart attack).
 Easy to follow animations on screen for bystanders for CPR/ bleeding prevention, etc.
 Wider alert range in suburban/rural areas. Smaller range in urban areas. Increase range if no rescuers found.
 The first firstResponder is in charge of the scene. Need to determine who that is (first to accept request or first on scene?). Save that user for legal purposes. (Can just keep PrimaryResponder as first in the array instead of making a special attribute, probably.)
+Level 2 or Advanced rescuers become in charge of emergency if they come to a scene with only a Basic Rescuer. 
 Override DO NOT DISTURB mode on responders phones.
 
 ## General TODO

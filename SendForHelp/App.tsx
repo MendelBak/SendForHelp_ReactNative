@@ -18,7 +18,10 @@ import FirstResponderScreen from './src/screens/FirstResponderScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
 import LocationDetailsScreen from './src/screens/LocationDetails';
 import PushNotification from 'react-native-push-notification';
+import LoginScreen from './src/screens/LoginScreen';
+import SignupScreen from './src/screens/SignupScreen';
 
+// TODO: Need to move these out of here. General cleanup of notifications is needed.
 // Function for Local Notification
 const localPushNotification = () => {
   PushNotification.localNotification({
@@ -35,8 +38,7 @@ PushNotification.configure({
     console.log('TOKEN:', token);
   },
   onNotification: function (notification) {
-    if(notification.foreground)
-    {
+    if (notification.foreground) {
       // Alert.alert(JSON.stringify(notification.message));
     }
     console.log('NOTIFICATION:', notification);
@@ -52,6 +54,9 @@ PushNotification.configure({
 });
 
 export default function App() {
+  // TODO: This should be in a store. (user.store.ts?) Need to make user.mode.ts anyway.
+  const isSignedIn: boolean = false;
+
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -67,10 +72,25 @@ export default function App() {
           activeTintColor: 'tomato',
           inactiveTintColor: 'gray',
         }}>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Symptoms" component={SymptomsScreen} />
-        <Tab.Screen name="Location Details" component={LocationDetailsScreen} />
-        <Tab.Screen name="First Responder" component={FirstResponderScreen} />
+        {isSignedIn ? (
+          <>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Symptoms" component={SymptomsScreen} />
+            <Tab.Screen
+              name="Location Details"
+              component={LocationDetailsScreen}
+            />
+            <Tab.Screen
+              name="First Responder"
+              component={FirstResponderScreen}
+            />
+          </>
+        ) : (
+          <>
+            <Tab.Screen name="Login" component={LoginScreen} />
+            <Tab.Screen name="Signup" component={SignupScreen} />
+          </>
+        )}
       </Tab.Navigator>
     </NavigationContainer>
   );

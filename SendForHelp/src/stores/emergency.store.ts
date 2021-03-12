@@ -19,7 +19,8 @@ configure({
   disableErrorBoundaries: false,
 });
 
-const URI = 'https://4def8561505d.ngrok.io';
+// TODO: Need to keep this URI information in another fole somewhere.
+const URI = 'http://9d7696f10407.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -71,16 +72,16 @@ export default class EmergencyStore {
     return this.emergency.active;
   }
 
-  async getEmergencies(): Promise<[EmergencyModel]> {
-    const emergencies = axios
+  async getEmergencies() {
+    axios
       .get(`${URI}/emergency`)
       .then(async (response) => {
-        return await response.data;
+        return response.data;
       })
       .catch((err) => {
         console.log('Error getting emergencies', err);
       });
-    return emergencies;
+    // return emergencies;
   }
 
   get getFirstResponders(): string[] {
@@ -98,7 +99,7 @@ export default class EmergencyStore {
       ),
       1,
     );
-    // TODO: Need to update the emergency with the newly modified rescuers (after that is built).
+    // TODO: Need to update the emergency with the newly modified rescuers (after rescuers collection/model is built on the backend).
   }
 
   //#region location
@@ -148,6 +149,7 @@ export default class EmergencyStore {
   }
   //#endregion location
 
+  // TODO: Should probably be in its own store.
   //#region symptoms
   updateSymptom(symptom: SYMPTOMS): void {
     this.emergency.symptom[symptom] = !this.emergency.symptom[symptom];
