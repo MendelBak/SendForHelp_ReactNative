@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import bodyParser from 'body-parser';
 
 // Internal
 import { uri } from '../backend/config/dbConsts';
@@ -27,14 +26,13 @@ app.all('/*', (req, res, next) => {
   next();
 });
 
-app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(
   cookieSession({
     // milliseconds of a day
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.session.cookieKey],
   })
 );
