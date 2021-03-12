@@ -12,11 +12,11 @@ const Tab = createBottomTabNavigator();
 // You can import Ionicons from @expo/vector-icons/Ionicons if you use Expo or
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import HomeScreen from './screens/HomeScreen';
-import DetailsScreen from './screens/LocationDetails';
-import FirstResponderScreen from './screens/FirstResponderScreen';
-import SymptomsScreen from './screens/SymptomsScreen';
-import LocationDetailsScreen from './screens/LocationDetails';
+import HomeScreen from './src/screens/HomeScreen';
+import DetailsScreen from './src/screens/LocationDetails';
+import FirstResponderScreen from './src/screens/FirstResponderScreen';
+import SymptomsScreen from './src/screens/SymptomsScreen';
+import LocationDetailsScreen from './src/screens/LocationDetails';
 import PushNotification from 'react-native-push-notification';
 
 // Function for Local Notification

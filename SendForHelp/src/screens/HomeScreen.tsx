@@ -14,7 +14,7 @@ import {
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import {EMERGENCY_STORE} from '../stores/storesKeys';
-import {LocalNotification} from '../src/services/Notification.service';
+import {LocalNotification} from '../services/Notification.service';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
