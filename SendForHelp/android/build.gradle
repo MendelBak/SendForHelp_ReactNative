@@ -11,6 +11,9 @@ buildscript {
         firebaseVersion = "+" 
         // firebaseVersion = "17.3.4" 
 
+
+    supportLibVersion = "28.0.0"
+
     }
     repositories {
         google()

@@ -20,7 +20,7 @@ configure({
 });
 
 // TODO: Need to keep this URI information in another fole somewhere.
-const URI = 'http://9d7696f10407.ngrok.io';
+const URI = 'http://3079bba2004c.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();

@@ -1,10 +1,10 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {View, Button, Text, PushNotificationIOS, Alert} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {getDeepLink} from './utilities';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,7 +35,7 @@ PushNotification.subscribeToTopic('emergency');
 //Push Notification configuration
 PushNotification.configure({
   onRegister: function (token) {
-    console.log('TOKEN:', token);
+    console.log('Push Notification Token registered :', token);
   },
   onNotification: function (notification) {
     if (notification.foreground) {
@@ -57,8 +57,8 @@ export default function App() {
   // TODO: This should be in a store. (user.store.ts?) Need to make user.mode.ts anyway.
   const isSignedIn: boolean = false;
 
-  return (
-    <NavigationContainer>
+  const TabNavigator = () => {
+    return (
       <Tab.Navigator
         screenOptions={({route}) => ({
           tabBarIcon: ({focused, color, size}) => {
@@ -92,6 +92,15 @@ export default function App() {
           </>
         )}
       </Tab.Navigator>
+    );
+  };
+
+  return (  
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

@@ -8,12 +8,10 @@ import User from '../models/user.model';
 // const User = mongoose.model('user')
 
 passport.serializeUser((user: any, done) => {
-  console.log("🚀 ~ passport.serializeUser ~ user", user)
   done(null, user.id);
 });
 
 passport.deserializeUser((userId, done) => {
-  console.log("🚀 ~ passport.deserializeUser ~ userId", userId)
   User.findById(userId).then((user) => {
     done(null, user);
   });
@@ -41,11 +39,15 @@ passport.use(
           },
           { upsert: true, new: true }
         ).then((user) => {
-          console.log('🚀 ~ ).then ~ existingUser', user);
+          console.log('🚀 ~ accessToken', accessToken);
           done(null, user);
+
+          // TODO: Need to return refreshToken and accessToken? Or does it happen automatically via done()?
+          // return accessToken;
         });
       } catch (err) {
         console.log('Error running Google OAuth authentication', err);
+        done(err, null);
       }
     }
   )
