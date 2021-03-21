@@ -38,6 +38,8 @@ Make sure that hardcoded IDs are replaced with real user IDs.
 Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
 
 ## Potential Monetization Strategies
+
+Monthly subscription to use app. Free first month, or reduced for new members/early adopters
 Sell swag.
 Donations.
 Corporate sponsors.

@@ -1,10 +1,11 @@
 // In App.js in a new project
 
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {getDeepLink} from './utilities';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { navigationRef } from './RootNavigation';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { getDeepLink } from './utilities';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -55,13 +56,13 @@ PushNotification.configure({
 
 export default function App() {
   // TODO: This should be in a store. (user.store.ts?) Need to make user.mode.ts anyway.
-  const isSignedIn: boolean = false;
+  const isSignedIn: boolean = true;
 
   const TabNavigator = () => {
     return (
       <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
             let iconName = 'information-circle';
 
             // You can return any component that you like here!
@@ -95,11 +96,10 @@ export default function App() {
     );
   };
 
-  return (  
-    <NavigationContainer>
+  return (
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        
       </Stack.Navigator>
     </NavigationContainer>
   );

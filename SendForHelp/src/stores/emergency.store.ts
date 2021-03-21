@@ -1,15 +1,16 @@
 // External
-import {makeAutoObservable} from 'mobx';
+import { makeAutoObservable } from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
-import {Alert, PermissionsAndroid, Platform} from 'react-native';
-import {configure} from 'mobx';
+import { Alert, PermissionsAndroid, Platform } from 'react-native';
+import { configure } from 'mobx';
 import axios from 'axios';
+import * as RootNavigation from '../../RootNavigation';
 
 // Internal
 import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
-import {SYMPTOMS} from '../common/enums';
+import { SYMPTOMS } from '../common/enums';
 
 configure({
   enforceActions: 'always',
@@ -20,7 +21,7 @@ configure({
 });
 
 // TODO: Need to keep this URI information in another fole somewhere.
-const URI = 'http://3079bba2004c.ngrok.io';
+const URI = 'http://237351f66ecf.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
@@ -48,7 +49,12 @@ export default class EmergencyStore {
 
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
-      .then((response) => this.setEmergency(response.data))
+      .then(
+        (response) => (
+          this.setEmergency(response.data),
+          console.log('🚀 ~ declareEmergency ~ this.emergency', response)
+        ),
+      )
       .catch((error) => {
         console.error('There was an error creating an emergency event!', error);
       });
@@ -62,7 +68,7 @@ export default class EmergencyStore {
     this.emergency.active = false;
 
     axios
-      .put(`${URI}/emergency/endEmergency`, {id: this.emergency._id})
+      .put(`${URI}/emergency/endEmergency`, { id: this.emergency._id })
       .catch((error) => {
         console.error('Error while ending an emergency event.', error);
       });
@@ -120,6 +126,7 @@ export default class EmergencyStore {
           `Code ${error.code}`,
           `You must allow GPS tracking: ${error.message}`,
         );
+        RootNavigation.navigate('Home', {});
         console.log(error);
       },
       {
@@ -156,6 +163,7 @@ export default class EmergencyStore {
   }
 
   updateSymptoms(): void {
+    console.log('🚀 ~ updateSymptoms ~ this.emergency', this.emergency);
     axios
       .put(`${URI}/emergency/updateSymptoms`, this.emergency)
       .catch((error) => {
