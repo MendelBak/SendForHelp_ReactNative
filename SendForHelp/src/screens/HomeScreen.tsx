@@ -1,5 +1,5 @@
 // External
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import {
   Text,
@@ -13,36 +13,37 @@ import {
 // Internal
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
-import {EMERGENCY_STORE} from '../stores/storesKeys';
-import {LocalNotification} from '../services/Notification.service';
+import { EMERGENCY_STORE } from '../stores/storesKeys';
+import { LocalNotification } from '../services/Notification.service';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
-const HomeScreen = observer(({navigation}: {navigation: any}) => {
+const HomeScreen = observer(({ navigation }: { navigation: any }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.container}>
-        <Text>Press a button to trigger the notification</Text>
-        <View style={{marginTop: 20}}>
+      <View>
+        <View>
           <Button
-            title={'Local Push Notification'}
+            title={'Test Local Push Notification'}
             onPress={LocalNotification}
           />
         </View>
       </View>
+      {emergencyStore.getIsEmergency ? (
+        <View style={styles.emergencyStatus}>
+          <Text>
+            {emergencyStore.getIsEmergency
+              ? 'EMERGENCY IN PROGRESS'
+              : 'NO EMERGENCY'}
+          </Text>
+          <Text>
+            {emergencyStore.getFirstResponders
+              ? `FIRST RESPONDER: ${emergencyStore.getFirstResponders}`
+              : ''}
+          </Text>
+        </View>
+      ) : null}
 
-      <View style={styles.emergencyStatus}>
-        <Text>
-          {emergencyStore.getIsEmergency
-            ? 'EMERGENCY IN PROGRESS'
-            : 'NO EMERGENCY'}
-        </Text>
-        <Text>
-          {emergencyStore.getFirstResponders
-            ? `FIRST RESPONDER: ${emergencyStore.getFirstResponders}`
-            : ''}
-        </Text>
-      </View>
       <Pressable
         disabled={emergencyStore.getIsEmergency}
         onPress={() => (
@@ -55,21 +56,19 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
           <Text style={styles.alertButton__text}>SEND FOR HELP</Text>
         </View>
       </Pressable>
-      <Pressable
-        disabled={!emergencyStore.getIsEmergency}
-        onPress={() => (emergencyStore.endEmergency(), Vibration.vibrate(200))}
-        style={styles.cancelButton}>
-        <View style={styles.cancelButton}>
-          <Text style={styles.cancelButton__text}>CANCEL EMERGENCY</Text>
-        </View>
-      </Pressable>
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Home!</Text>
-        <Button
-          title="Go to Settings"
-          onPress={() => navigation.navigate('Location Details')}
-        />
-      </View>
+
+      {emergencyStore.getIsEmergency ? (
+        <Pressable
+          disabled={!emergencyStore.getIsEmergency}
+          onPress={() => (
+            emergencyStore.endEmergency(), Vibration.vibrate(200)
+          )}
+          style={styles.cancelButton}>
+          <View style={styles.cancelButton}>
+            <Text style={styles.cancelButton__text}>CANCEL EMERGENCY</Text>
+          </View>
+        </Pressable>
+      ) : null}
     </View>
   );
 });
