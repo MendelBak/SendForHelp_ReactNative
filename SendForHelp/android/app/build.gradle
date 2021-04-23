@@ -182,6 +182,10 @@ android {
     }
 }
 
+project.ext.vectoricons = [
+	iconFontNames: ['MaterialCommunityIcons.ttf', 'Ionicons.ttf'] // Add fonts needed
+]
+
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
