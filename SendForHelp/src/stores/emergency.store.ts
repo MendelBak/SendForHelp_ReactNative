@@ -11,6 +11,7 @@ import EmergencyLocationModel from '../models/emergencyLocation.model';
 import SymptomModel from '../models/symptom.model';
 import EmergencyModel from '../models/emergency.model';
 import { SYMPTOMS } from '../common/enums';
+import { URI } from '../../URI';
 
 configure({
   enforceActions: 'always',
@@ -19,9 +20,6 @@ configure({
   observableRequiresReaction: true,
   disableErrorBoundaries: false,
 });
-
-// TODO: Need to keep this URI information in another fole somewhere.
-const URI = 'http://237351f66ecf.ngrok.io';
 
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();

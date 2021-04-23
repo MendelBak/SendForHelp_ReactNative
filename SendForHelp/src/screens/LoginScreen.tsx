@@ -4,8 +4,9 @@ import React from 'react';
 import { Text, View, Button, StyleSheet, Alert, Linking } from 'react-native';
 import InAppBrowser from 'react-native-inappbrowser-reborn';
 import { getDeepLink } from '../../utilities';
+import { URI } from '../../URI';
 
-const URI = 'http://3079bba2004c.ngrok.io';
+// const URI = 'http://54.242.127.157:3000';
 
 const LoginScreen = observer(({ navigation }: { navigation: any }) => {
   const handeOAuthLogin = async () => {
@@ -32,16 +33,21 @@ const LoginScreen = observer(({ navigation }: { navigation: any }) => {
             enableDefaultShare: false,
             // forceCloseOnRedirection: false,
             showInRecents: true,
+            animations: {
+              startEnter: 'slide_in_right',
+              startExit: 'slide_out_left',
+              endEnter: 'slide_in_left',
+              endExit: 'slide_out_right',
+            },
+            headers: {
+              'my-custom-header': 'my custom header value',
+            },
           },
         ).then((response) => {
           console.log('🚀 ~ ).then ~ response', response);
           if (response.type === 'success' && response.url) {
             Linking.openURL(response.url);
           }
-
-          // if (response.type === 'success' && response.url) {
-          //   Linking.openURL(response.url);
-          // }
         });
       } else {
         console.log('🚀 ~ ).else condition hit');
