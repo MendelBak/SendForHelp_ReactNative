@@ -7,8 +7,10 @@ buildscript {
         compileSdkVersion = 29
         targetSdkVersion = 29
 
+        // googlePlayServicesVersion = "+"
+        // firebaseVersion = "+" 
+        firebaseVersion = "17.6.0"
         googlePlayServicesVersion = "+"
-        firebaseVersion = "+" 
         // firebaseVersion = "17.3.4" 
 
 
