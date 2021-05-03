@@ -8,13 +8,15 @@ import {
   Pressable,
   Vibration,
   StyleSheet,
+  Alert,
+  Linking,
 } from 'react-native';
 
 // Internal
 import EmergencyStore from '../stores/emergency.store';
 import rootStores from '../stores';
 import { EMERGENCY_STORE } from '../stores/storesKeys';
-import { LocalNotification } from '../services/Notification.service';
+import { notificationService } from '../notifications/Notification.service';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
@@ -25,7 +27,7 @@ const HomeScreen = observer(({ navigation }: { navigation: any }) => {
         <View>
           <Button
             title={'Test Local Push Notification'}
-            onPress={LocalNotification}
+            onPress={notificationService.sendLocalNotification}
           />
         </View>
       </View>
@@ -46,11 +48,37 @@ const HomeScreen = observer(({ navigation }: { navigation: any }) => {
 
       <Pressable
         disabled={emergencyStore.getIsEmergency}
-        onPress={() => (
-          emergencyStore.initializeEmergency(),
-          navigation.navigate('Symptoms'),
-          Vibration.vibrate(200)
-        )}
+        onPress={() => {
+          emergencyStore.initializeEmergency().then(() => {
+            // TODO: I want to move this alert to trigger when I receive the push notificaation, which will prove the event made it to the DB.
+            // Need to figure out how to subscribe all relevant parties to this a particular emergency, to receive updates on it.
+            Alert.alert(
+              'Your call for help has been sent!',
+              'Please call 911 while waiting for a rescuer to respond',
+              [
+                {
+                  text: 'Add Details',
+                  onPress: () => (
+                    navigation.navigate('Symptoms'), Vibration.vibrate(200)
+                  ),
+                  style: 'cancel',
+                },
+                {
+                  text: 'Call 911',
+                  onPress: () => (
+                    // TODO: Add police phone number here. Localize for geographic location.
+                    Linking.openURL('tel:000'), Vibration.vibrate(200)
+                  ),
+                  style: 'cancel',
+                },
+              ],
+              {
+                cancelable: true,
+              },
+            );
+          }),
+            Vibration.vibrate(200);
+        }}
         style={styles.alertButton}>
         <View style={styles.alertButton}>
           <Text style={styles.alertButton__text}>SEND FOR HELP</Text>
