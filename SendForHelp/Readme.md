@@ -37,6 +37,7 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 - Add SSL/TLS.
 - Make sure that hardcoded IDs are replaced with real user IDs.
 - Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
+- Currently using the `Nip.io` wildcard DNS server to allow redirects during OAuth authentication. Need to replace that with my actual domain name, when I purchase it via AWS Route 53 and add an A Record.
 
 ## Potential Monetization Strategies
 
