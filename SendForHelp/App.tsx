@@ -5,7 +5,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { navigationRef } from './RootNavigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { getDeepLink } from './utilities';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -14,61 +13,36 @@ const Tab = createBottomTabNavigator();
 // react-native-vector-icons/Ionicons otherwise.
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import HomeScreen from './src/screens/HomeScreen';
-import DetailsScreen from './src/screens/LocationDetails';
 import FirstResponderScreen from './src/screens/FirstResponderScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
 import LocationDetailsScreen from './src/screens/LocationDetails';
-import PushNotification from 'react-native-push-notification';
 import LoginScreen from './src/screens/LoginScreen';
 import SignupScreen from './src/screens/SignupScreen';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { notificationSubscriptionService } from './src/notifications/NotificationSubscription.service';
+import rootStores from './src/stores';
+import EmergencyStore from './src/stores/emergency.store';
+import { EMERGENCY_STORE } from './src/stores/storesKeys';
+import { observer } from 'mobx-react-lite';
 
-// TODO: Need to move these out of here. General cleanup of notifications is needed.
-// Function for Local Notification
-const localPushNotification = () => {
-  PushNotification.localNotification({
-    title: 'Local Notification',
-    message: 'This is a local notification example',
-  });
-};
+const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
-PushNotification.subscribeToTopic('emergency');
-
-//Push Notification configuration
-PushNotification.configure({
-  onRegister: function (token) {
-    console.log('Push Notification Token registered :', token);
-  },
-  onNotification: function (notification) {
-    if (notification.foreground) {
-      // Alert.alert(JSON.stringify(notification.message));
-    }
-    console.log('NOTIFICATION:', notification);
-    // notification.finish(PushNotificationIOS.FetchResult.NoData);
-  },
-  permissions: {
-    alert: true,
-    badge: true,
-    sound: true,
-  },
-  popInitialNotification: true,
-  requestPermissions: true,
-});
-
-export default function App() {
+const App = observer(() => {
   // TODO: This should be in a store. (user.store.ts?) Need to make user.model.ts anyway.
   const isSignedIn: boolean = true;
+
+  // TODO: Need to make notification subscriptions dependent on what role the user is. Should probably also be in the user.store
+  notificationSubscriptionService.subscribe('emergency');
 
   const TabNavigator = () => {
     return (
       <Tab.Navigator
-        screenOptions={({ route }) => ({
-          // tabBarIcon: ({ focused, color, size }) => {
-          //   let iconName = 'information-circle';
-          //   // You can return any component that you like here!
-          //   return <Ionicons name={iconName} size={size} color={color} />;
-          // },
-        })}
+        // screenOptions={({ route }) => ({
+        // tabBarIcon: ({ focused, color, size }) => {
+        //   let iconName = 'information-circle';
+        //   // You can return any component that you like here!
+        //   return <Ionicons name={iconName} size={size} color={color} />;
+        // },
+        // })}
         tabBarOptions={{
           activeTintColor: 'red',
           inactiveTintColor: 'gray',
@@ -80,7 +54,7 @@ export default function App() {
               component={HomeScreen}
               options={{
                 tabBarIcon: ({ focused, color, size }) => {
-                  let iconName = 'home';
+                  let iconName = 'medkit-outline';
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
@@ -91,7 +65,7 @@ export default function App() {
               component={SymptomsScreen}
               options={{
                 tabBarIcon: ({ focused, color, size }) => {
-                  let iconName = 'details';
+                  let iconName = 'list-outline';
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
@@ -127,24 +101,63 @@ export default function App() {
               component={LoginScreen}
               options={{
                 tabBarIcon: ({ focused, color, size }) => {
-                  let iconName = 'login';
+                  let iconName = 'log-in-outline';
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
               }}
             />
-            <Tab.Screen name="Signup" component={SignupScreen} />
+            <Tab.Screen
+              name="Signup"
+              component={SignupScreen}
+              options={{
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName = 'log-out-outline';
+
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+              }}
+            />
           </>
         )}
       </Tab.Navigator>
     );
   };
 
+  const displayRescuer = (): string => {
+    if (
+      emergencyStore.getIsEmergency &&
+      !emergencyStore.getFirstResponders.length
+    ) {
+      return 'Send For Help - Looking For Rescuer...';
+    } else if (
+      emergencyStore.getIsEmergency &&
+      emergencyStore.getFirstResponders.length
+    ) {
+      return `Send For Help - Primary Rescuer: ${emergencyStore.getFirstResponders[0]}`;
+    }
+
+    return 'Send For Help';
+  };
+
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
-        <Stack.Screen name="Send For Help" component={TabNavigator} />
+        <Stack.Screen
+          name={displayRescuer()}
+          component={TabNavigator}
+          options={
+            emergencyStore.getIsEmergency
+              ? {
+                  headerStyle: { backgroundColor: 'red' },
+                  headerTitleStyle: { color: 'white', fontWeight: 'bold' },
+                }
+              : undefined
+          }
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+});
+
+export default App;
