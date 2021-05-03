@@ -10,7 +10,7 @@ import API from '../api/api';
 // Android doesn't need the user's consent to send notifications, whereas iOS does
 // but Android's user can still turn off notifications in the system settings
 
-class NotificationService {
+class NotificationConfiguration {
   initNotificationService = (registerHandler) => {
     this.configure();
     this.registerHandler = registerHandler;
@@ -209,6 +209,6 @@ class NotificationService {
   };
 }
 
-const Notifications = new NotificationService();
+const Notifications = new NotificationConfiguration();
 
 export default Notifications;

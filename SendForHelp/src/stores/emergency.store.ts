@@ -47,12 +47,7 @@ export default class EmergencyStore {
 
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
-      .then(
-        (response) => (
-          this.setEmergency(response.data),
-          console.log('🚀 ~ declareEmergency ~ this.emergency', response)
-        ),
-      )
+      .then((response) => this.setEmergency(response.data))
       .catch((error) => {
         console.error('There was an error creating an emergency event!', error);
       });
