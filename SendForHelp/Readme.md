@@ -23,7 +23,8 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 - Wider alert range in suburban/rural areas. Smaller range in urban areas. Increase range if no rescuers found.
 - The first firstResponder is in charge of the scene. Need to determine who that is (first to accept request or first on scene?). Save that user for legal purposes. (Can just keep PrimaryResponder as first in the array instead of making a special attribute, probably.)
 - Level 2 or Advanced rescuers become in charge of emergency if they come to a scene with only a Basic Rescuer. 
-- Override DO NOT DISTURB mode on responders phones.
+- Auto Video and voice capture.
+- Override DO NOT DISTURB mode on rescuers phones for emergency alert and on requesters' phone for follow up alerts.
 
 ## General TODO
 - Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
@@ -31,6 +32,7 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 ## Deployment TODO
 - Check TODO Tree for comments to self.
 - Need to open MongoDB, Google Developers COnsole, Authentication, etc, to all IPs, not just my local IP.
+- How to compile TS to JS for server? 
 - Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't use the key stored in the codebase. 
 - API key for backend requests.
 - Deploy backend to AWS EC2 or Kubernetes (need Docker for Kubernetes).

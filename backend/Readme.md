@@ -3,7 +3,7 @@
 1. Navigate into the /backend directory and run `npm install`
 2. Add new file to backend/config/dbConsts.ts. It should be based on the exampleDbConsts.ts file but need to add the DB password and cluster name.
 3. `npm start`
-4. Run ngrok by running `ngrok http 8000` (ngrok is currently located in my /Downloads directory)
+4. Run ngrok by running `ngrok http 3000` (ngrok is currently located in my /Downloads directory)
 5. Copy the ngrok 'forwarding' port (for example `http://98380aba1507.ngrok.io`). and paste it in the fetcher as the route.
 
 <!-- Good tutorial on installing server on new EC2 instance -->

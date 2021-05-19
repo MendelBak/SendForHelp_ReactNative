@@ -16,7 +16,7 @@ import passport from 'passport';
 module.exports.mongoose = mongoose;
 
 const app = express();
-const PORT = 8000;
+const PORT = 3000;
 
 app.use(cors());
 
