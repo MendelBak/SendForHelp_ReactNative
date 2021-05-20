@@ -1,8 +1,11 @@
 import PushNotification from 'react-native-push-notification';
 
 class NotificationSubscriptionService {
-  subscribe(target: string) {
-    PushNotification.subscribeToTopic('target');
+  subscribe(topic: string) {
+    PushNotification.subscribeToTopic(topic);
+    PushNotification.getChannels(function (channel_ids) {
+      console.log(channel_ids); // ['channel_id_1']
+    });
   }
 
 }
