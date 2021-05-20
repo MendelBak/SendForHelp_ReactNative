@@ -114,13 +114,9 @@ export default class EmergencyStore {
       (position: GeolocationPosition) => {
         this.declareEmergency(position);
       },
-      (error: any) => {
-        Alert.alert(
-          `Code ${error.code}`,
-          `You must allow GPS tracking: ${error.message}`,
-        );
-        RootNavigation.navigate('Home', {});
-        console.log(error);
+      async (error: any) => {
+        Alert.alert(`GPS Error`, `You must allow GPS tracking`);
+        RootNavigation.navigate('Home', { resetEmergencyAnimation: true });
       },
       {
         accuracy: {

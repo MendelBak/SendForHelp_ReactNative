@@ -16,8 +16,8 @@ import HomeScreen from './src/screens/HomeScreen';
 import FirstResponderScreen from './src/screens/FirstResponderScreen';
 import SymptomsScreen from './src/screens/SymptomsScreen';
 import LocationDetailsScreen from './src/screens/LocationDetails';
-import LoginScreen from './src/screens/LoginScreen';
-import SignupScreen from './src/screens/SignupScreen';
+import LoginScreen from './src/screens/Auth/LoginScreen';
+import SignupScreen from './src/screens/Auth/SignupScreen';
 import { notificationSubscriptionService } from './src/notifications/NotificationSubscription.service';
 import rootStores from './src/stores';
 import EmergencyStore from './src/stores/emergency.store';
@@ -129,12 +129,12 @@ const App = observer(() => {
       emergencyStore.getIsEmergency &&
       !emergencyStore.getFirstResponders.length
     ) {
-      return 'Send For Help - Looking For Rescuer...';
+      return 'Looking For Rescuer...';
     } else if (
       emergencyStore.getIsEmergency &&
       emergencyStore.getFirstResponders.length
     ) {
-      return `Send For Help - Primary Rescuer: ${emergencyStore.getFirstResponders[0]}`;
+      return `Primary Rescuer: ${emergencyStore.getFirstResponders[0]}`;
     }
 
     return 'Send For Help';
@@ -144,16 +144,17 @@ const App = observer(() => {
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator>
         <Stack.Screen
-          name={displayRescuer()}
+          // name={displayRescuer()}
+          name={' '}
           component={TabNavigator}
-          options={
-            emergencyStore.getIsEmergency
-              ? {
-                  headerStyle: { backgroundColor: 'red' },
-                  headerTitleStyle: { color: 'white', fontWeight: 'bold' },
-                }
-              : undefined
-          }
+          // options={
+          //   emergencyStore.getIsEmergency
+          //     ? {
+          //         headerStyle: { backgroundColor: 'red' },
+          //         headerTitleStyle: { color: 'white', fontWeight: 'bold' },
+          //       }
+          //     : undefined
+          // }
         />
       </Stack.Navigator>
     </NavigationContainer>
