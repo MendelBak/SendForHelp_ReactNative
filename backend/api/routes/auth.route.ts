@@ -10,22 +10,35 @@ module.exports = (app: any) => {
     }
   });
 
+
+    // TODO: Still need work done on this. It's not logging in properly. Supposed to be working with OAuth and Google Firebase to redirect.
   // Google OAuth routes
   app.get(
     '/auth/google/login',
     passport.authenticate('google', {
       scope: ['profile', 'email'],
-    })
-  );
-
-  app.get(
-    '/auth/google/redirect',
-    passport.authenticate('google', { failureRedirect: '/auth/google/login' }),
-    (req: any, res: any) => {
-      console.log('hit the auth/google/redirect get route');
+    }),(req: any, res: any) => {
+      console.log('hit the auth/google/login get route', req.user);
       // res.redirect('/auth/currentUser');
       // res.send(req.user);
       res.send('<script>window.close()</script>');
+    }
+  );
+
+  // TODO: Still need work done on this. It's not logging in properly. Supposed to be working with OAuth and Google Firebase to redirect.
+  app.get(
+    '/auth/google/redirect',
+    passport.authenticate('google', {
+      scope: ['profile', 'email'],
+      failureRedirect: '/auth/google/login',
+    }),
+    (req: any, res: any) => {
+      console.log('hit the auth/google/redirect get route', req.user);
+      // res.redirect('/auth/currentUser');
+      // res.redirect(`sendforhelp://my-host`);
+      res.redirect(`sendforhelp://my-host/?user=${req.user}`);
+      // res.send(req.user);
+      // res.send('<script>window.close()</script>');
     }
   );
 
