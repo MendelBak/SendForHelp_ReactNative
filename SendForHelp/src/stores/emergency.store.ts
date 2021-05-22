@@ -63,6 +63,7 @@ export default class EmergencyStore {
     }
 
     this.emergency.active = false;
+    this.nearestIntersection = undefined;
 
     axios
       .put(`${URI}/emergency/endEmergency`, { id: this.emergency._id })
