@@ -125,7 +125,7 @@ const HomeScreen = observer(
           style={styles.alertButton}>
           <View style={styles.alertButton}>
             <Text style={styles.alertButton__text}>
-              {emergencyStore.getIsEmergency ? 'CANCEL' : 'SEND FOR HELP'}
+              {emergencyStore.getIsEmergency ? 'CANCEL' : 'GET HELP'}
             </Text>
           </View>
         </Pressable>
@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 2,
     borderColor: 'grey',
-    backgroundColor: 'white',
+    backgroundColor: '#F0F0F3',
   },
   alertButton: {
     backgroundColor: '#F0F0F3',

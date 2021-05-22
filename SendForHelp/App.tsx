@@ -146,6 +146,7 @@ const App = observer(() => {
         <Stack.Screen
           // name={displayRescuer()}
           name={' '}
+          options={{ headerShown: false }}
           component={TabNavigator}
           // options={
           //   emergencyStore.getIsEmergency

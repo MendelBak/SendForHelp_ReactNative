@@ -8,11 +8,11 @@ import {
   View,
   Button,
 } from 'react-native';
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 
 import rootStores from '../stores';
 import EmergencyStore from '../stores/emergency.store';
-import {EMERGENCY_STORE} from '../stores/storesKeys';
+import { EMERGENCY_STORE } from '../stores/storesKeys';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
@@ -22,7 +22,25 @@ const FirstResponderScreen = observer(() => {
     getIsEmergency,
     getSymptoms,
     getFirstResponders,
+    nearestIntersection,
   } = emergencyStore;
+
+  const returnNearestIntersection = () => {
+    if (nearestIntersection) {
+      return (
+        <>
+          {/* <Text>
+            Nearest Intersection: {nearestIntersection?.intersection?.street1} -
+            {nearestIntersection?.intersection?.street2}
+          </Text>
+          <Text>
+            Emergency Distance from Intersection:
+            {nearestIntersection?.intersection?.distance}
+          </Text> */}
+        </>
+      );
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -34,7 +52,19 @@ const FirstResponderScreen = observer(() => {
       </View>
 
       <Pressable style={styles.welcome}>
-        <Text>Location of Emergency</Text>
+        <Text style={{ fontSize: 15, color: 'white' }}>
+          Location of Emergency
+        </Text>
+
+        {returnNearestIntersection()}
+        <Text>
+          Nearest Intersection: {nearestIntersection?.intersection?.street1} -
+          {nearestIntersection?.intersection?.street2}
+        </Text>
+        <Text>
+          Emergency Distance from Intersection:
+          {nearestIntersection?.intersection?.distance}
+        </Text>
         <Text>Latitude: {getEmergencyLocation.latitude}</Text>
         <Text>Longitude: {getEmergencyLocation.longitude}</Text>
       </Pressable>
@@ -68,7 +98,7 @@ const FirstResponderScreen = observer(() => {
             height: 'auto',
             padding: 10,
           }}>
-          <Text style={{color: 'white'}}>
+          <Text style={{ color: 'white' }}>
             -- Choking: {getSymptoms.choking.toString()}
           </Text>
           <Text>-- Drowning: {getSymptoms.drowning.toString()}</Text>
@@ -79,7 +109,7 @@ const FirstResponderScreen = observer(() => {
       ) : null}
 
       {getIsEmergency && getFirstResponders.length > 0 ? (
-        <View style={{marginTop: 15}}>
+        <View style={{ marginTop: 15 }}>
           <Button
             title="I Can't Help Anymore"
             // TODO: Need to replace this fake ID with real ID.

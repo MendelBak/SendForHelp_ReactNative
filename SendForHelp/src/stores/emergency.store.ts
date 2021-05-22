@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { configure } from 'mobx';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import * as RootNavigation from '../../RootNavigation';
 
 // Internal
@@ -25,6 +25,7 @@ export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
+  nearestIntersection: any;
 
   constructor() {
     makeAutoObservable(this);
@@ -47,7 +48,10 @@ export default class EmergencyStore {
 
     axios
       .post(`${URI}/emergency/createEmergency`, this.emergency)
-      .then((response) => this.setEmergency(response.data))
+      .then((response) => {
+        this.setEmergency(response.data);
+        this.getNearestIntersection(position);
+      })
       .catch((error) => {
         console.error('There was an error creating an emergency event!', error);
       });
@@ -143,6 +147,22 @@ export default class EmergencyStore {
   get getEmergencyLocation(): EmergencyLocationModel {
     return this.emergency.emergencyLocation;
   }
+
+  getNearestIntersection = (locationData: any) => {
+    axios
+      .get(
+        `http://api.geonames.org/findNearestIntersectionOSMJSON?lat=${locationData?.coords?.latitude}&lng=${locationData?.coords?.longitude}&username=bystanderAccount`,
+      )
+      .then((response) => {
+        this.nearestIntersection = response.data;
+      })
+      .catch((error) => {
+        console.error(
+          'There was an error finding the emergency intersection',
+          error,
+        );
+      });
+  };
   //#endregion location
 
   // TODO: Should probably be in its own store.
@@ -152,7 +172,6 @@ export default class EmergencyStore {
   }
 
   updateSymptoms(): void {
-    console.log('🚀 ~ updateSymptoms ~ this.emergency', this.emergency);
     axios
       .put(`${URI}/emergency/updateSymptoms`, this.emergency)
       .catch((error) => {
