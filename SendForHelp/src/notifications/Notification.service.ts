@@ -2,6 +2,10 @@ import { Alert } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
 class NotificationService {
+  constructor() {
+    this.configurePushNotification();
+  }
+
   // TODO: I'm not sure this is working/necessary.
   configurePushNotification = () => {
     PushNotification.configure({
@@ -9,8 +13,9 @@ class NotificationService {
         console.log('Push Notification Token registered :', token);
       },
       onNotification: function (notification) {
+        
         if (notification.foreground) {
-          Alert.alert(JSON.stringify(notification.message));
+          // Alert.alert(JSON.stringify(notification.message));
         }
         console.log('NOTIFICATION:', notification);
         // notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -56,4 +61,3 @@ class NotificationService {
   };
 }
 export const notificationService = new NotificationService();
-notificationService.configurePushNotification();

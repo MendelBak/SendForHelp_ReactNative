@@ -34,19 +34,21 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 
 - Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
 - Handle if users don't turn on GPS during call event.
+- Create `Devices` collection to track user's devices. Store FCM token, since they are unique. One-to-many relationship with `users` collection. Allows notifications to be sent to specific users, if needed (primarily needed for peer-to-peer direct messaging)
 
 ## Deployment TODO
 
 - Check TODO Tree for comments to self.
-- Need to open MongoDB, Google Developers COnsole, Authentication, etc, to all IPs, not just my local IP.
+- DONE - Need to open MongoDB, Google Developers COnsole, Authentication, etc, to all IPs, not just my local IP.
 - How to compile TS to JS for server?
 - Set the GOOGLE_APPLICATION_CREDENTIALS environment variable for the backend firebase-admin API key. Don't use the key stored in the codebase.
-- API key for backend requests.
-- Deploy backend to AWS EC2 or Kubernetes (need Docker for Kubernetes).
+- API key for backend requests (Authorization Headers/ JWT)
+- DONE - Deploy backend to AWS EC2 or Kubernetes (need Docker for Kubernetes).
 - Add SSL/TLS.
 - Make sure that hardcoded IDs are replaced with real user IDs.
-- Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
+- DONE - Google Developers Console Credentials page. Need to add authorized origins and redirect URLs from the server (currently only allowing from localhost).
 - Currently using the `Nip.io` wildcard DNS server to allow redirects during OAuth authentication. Need to replace that with my actual domain name, when I purchase it via AWS Route 53 and add an A Record.
+- Figure out CI/DC to Play Store and EC2.
 
 ## Potential Monetization Strategies
 

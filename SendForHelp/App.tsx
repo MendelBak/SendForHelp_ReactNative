@@ -19,6 +19,7 @@ import LocationDetailsScreen from './src/screens/LocationDetails';
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
 import { notificationSubscriptionService } from './src/notifications/NotificationSubscription.service';
+import { notificationService } from './src/notifications/Notification.service';
 import rootStores from './src/stores';
 import EmergencyStore from './src/stores/emergency.store';
 import { EMERGENCY_STORE } from './src/stores/storesKeys';
@@ -29,6 +30,8 @@ const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 const App = observer(() => {
   // TODO: This should be in a store. (user.store.ts?) Need to make user.model.ts anyway.
   const isSignedIn: boolean = true;
+  const notifService = notificationService;
+  notifService.sendLocalNotification();
 
   // TODO: Need to make notification subscriptions dependent on what role the user is. Should probably also be in the user.store
   notificationSubscriptionService.subscribe('emergency');
