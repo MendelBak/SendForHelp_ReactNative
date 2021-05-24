@@ -13,7 +13,6 @@ class NotificationService {
         console.log('Push Notification Token registered :', token);
       },
       onNotification: function (notification) {
-        
         if (notification.foreground) {
           // Alert.alert(JSON.stringify(notification.message));
         }
@@ -41,6 +40,7 @@ class NotificationService {
   //     </View> */}
 
   sendLocalNotification = () => {
+    console.log('Sending local notification');
     PushNotification.localNotification({
       priority: 'max',
       invokeApp: true,

@@ -24,15 +24,16 @@ import rootStores from './src/stores';
 import EmergencyStore from './src/stores/emergency.store';
 import { EMERGENCY_STORE } from './src/stores/storesKeys';
 import { observer } from 'mobx-react-lite';
+import SettingsScreen from './src/screens/Settings/SettingsScreen';
 
 const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
 
 const App = observer(() => {
   // TODO: This should be in a store. (user.store.ts?) Need to make user.model.ts anyway.
   const isSignedIn: boolean = true;
-  const notifService = notificationService;
-  notifService.sendLocalNotification();
+  // const notifService = notificationService;
 
+  // notifService.sendLocalNotification();
   // TODO: Need to make notification subscriptions dependent on what role the user is. Should probably also be in the user.store
   notificationSubscriptionService.subscribe('emergency');
 
@@ -91,6 +92,17 @@ const App = observer(() => {
               options={{
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName = 'people-outline';
+
+                  return <Ionicons name={iconName} size={size} color={color} />;
+                },
+              }}
+            />
+            <Tab.Screen
+              name="Settings"
+              component={SettingsScreen}
+              options={{
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName = 'settings-outline';
 
                   return <Ionicons name={iconName} size={size} color={color} />;
                 },
