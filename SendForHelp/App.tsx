@@ -34,8 +34,11 @@ const App = observer(() => {
   // const notifService = notificationService;
 
   // notifService.sendLocalNotification();
+
+
   // TODO: Need to make notification subscriptions dependent on what role the user is. Should probably also be in the user.store
-  notificationSubscriptionService.subscribe('emergency');
+  notificationSubscriptionService.subscribeToTopic('emergency');
+  notificationService.configurePushNotification();
 
   const TabNavigator = () => {
     return (

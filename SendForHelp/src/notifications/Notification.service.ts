@@ -3,11 +3,12 @@ import PushNotification from 'react-native-push-notification';
 
 class NotificationService {
   constructor() {
-    this.configurePushNotification();
+    // this.configurePushNotification();
   }
 
   // TODO: I'm not sure this is working/necessary.
   configurePushNotification = () => {
+    console.log('configuring push notification');
     PushNotification.configure({
       onRegister: function (token) {
         console.log('Push Notification Token registered :', token);
@@ -46,7 +47,7 @@ class NotificationService {
       invokeApp: true,
       visibility: 'public',
       importance: 'max',
-      channelId: 'fcm_fallback_notification_channel',
+      channelId: 'default_channel_id',
       autoCancel: true,
       bigText: 'This is local notification. Emergency (x) feet away!',
       subText: 'Send For Help - Emergency!',
