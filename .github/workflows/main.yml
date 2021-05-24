@@ -1,61 +1,60 @@
-name: Continuous Integration
+# name: Development Distribution
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  installNpm:
-    name: InstallNPM
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - uses: actions/setup-node@master
-#     - uses: c-hive/gha-yarn-cache@v1
-
-    - name: Install node modules
-      run: |
-        npm install
-      working-directory: SendForHelp  
-#   setupGradle:
-#       name: setupGradle
-#       runs-on: ubuntu-latest
-#       steps:
-    - name: Cache Gradle Wrapper
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-    - name: Cache Gradle Dependencies
-      uses: actions/cache@v2
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-caches-
-#   generateAndroidBuild:
-#       name: generateAndroidBuild
-#       runs-on: ubuntu-latest
+# jobs:
+#   dev-distribution:
+#     runs-on: ubuntu-latest
+#     name: Development Distribution
 #     steps:
-    - name: Make Gradlew Executable
-      run: cd android && chmod +x ./gradlew
-      working-directory: SendForHelp
+#     - name: Checkout
+#       uses: actions/checkout@v2
+#     - uses: actions/setup-node@master
+# #     - uses: c-hive/gha-yarn-cache@v1
 
+#     - name: Install node modules
+#       run: |
+#         npm install
+#     - name: Cache Gradle Wrapper
+#       uses: actions/cache@v2
+#       with:
+#         path: ~/.gradle/wrapper
+#         key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
 
-    - name: Build Android App Bundle
-      run: |
-        cd android && ./gradlew bundleRelease --no-daemon
-      working-directory: SendForHelp
+#     - name: Cache Gradle Dependencies
+#       uses: actions/cache@v1
+#       with:
+#         path: ~/.gradle/caches
+#         key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+#         restore-keys: |
+#           ${{ runner.os }}-gradle-caches-
+#     - name: Make Gradlew Executable
+#       run: cd android && chmod +x ./gradlew
 
-    - name: Sign App Bundle
-      id: sign_app
-      uses: r0adkll/sign-android-release@v1
-      with:
-        releaseDirectory: android/app/build/outputs/bundle/release
-        signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-        alias: ${{ secrets.ANDROID_SIGNING_ALIAS }}
-        keyStorePassword: ${{ secrets.ANDROID_SIGNING_STORE_PASSWORD }}
-        keyPassword: ${{ secrets.ANDROID_SIGNING_KEY_PASSWORD }}
+#     - name: Build Android Release
+#       run: |
+#         cd android && ./gradlew assembleRelease --no-daemon
+#     - name: Upload Artifact
+#       uses: actions/upload-artifact@v1
+#       with:
+#         name: app-release.apk
+#         path: android/app/build/outputs/apk/release/
+
+#     - name: Distribute app via Firebase App Distribution
+#       env:
+#           firebaseToken: ${{ secrets.FIREBASE_TOKEN }}
+#           firebaseGroups: ${{ secrets.FIREBASE_GROUPS }}
+#           firebaseAppId: ${{ secrets.FIREBASE_APP_ID }}
+#           notes: ${{ github.event.head_commit.message }}
+#       run: |
+#         yarn global add firebase-tools
+#         export PATH="$(yarn global bin):$PATH"
+#         firebase \
+#           appdistribution:distribute android/app/build/outputs/apk/release/app-release.apk \
+#           --app $firebaseAppId \
+#           --release-notes "$notes" \
+#           --groups "$firebaseGroups" \
+#           --token "$firebaseToken"
