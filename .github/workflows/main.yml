@@ -40,7 +40,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: Make Gradlew Executable
-          run: cd SendForHelp/android && chmod +x ./gradlew
+          run: ls & cd android && chmod +x ./gradlew
           
         - name: Build Android App Bundle
           run: |
