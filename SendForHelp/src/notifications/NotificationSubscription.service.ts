@@ -1,37 +1,34 @@
 import PushNotification from 'react-native-push-notification';
-import rootStores from '../stores';
-import { USER_STORE } from '../stores/storesKeys';
-import UserStore from '../stores/user.store';
+import { FCM_CHANNEL_ID } from '../common/enums';
 
-const userStore: UserStore = rootStores[USER_STORE];
 class NotificationSubscriptionService {
   constructor() {
-    if (userStore.user.isHero) {
-      this.createChannel(
-        'bystanders',
-        'Bystander Alerts',
-        'DA channel to notify Bystanders of emergency events and updates',
-        5,
-      );
-    }
-
     this.createChannel(
-      'heroes',
-      'Hero Alerts',
-      'A channel to notify Heroes of emergency events and updates',
+      FCM_CHANNEL_ID.BYSTANDER,
+      'Bystander Alerts',
+      'Channel to notify Bystanders of emergency events and updates',
       5,
     );
 
     this.createChannel(
-      'default_channel_id',
+      FCM_CHANNEL_ID.HERO,
+      'Hero Alerts',
+      'Channel to notify Heroes of emergency events and updates',
+      5,
+    );
+
+    this.createChannel(
+      FCM_CHANNEL_ID.DEFAULT,
       'Default Notification Channel',
-      'Default Notification Channel for app communtications',
+      'Default Notification Channel for app communications',
       5,
     );
 
     PushNotification.getChannels((channel_ids) => {
       console.log('All channel IDs', channel_ids);
     });
+
+    // End Constructor
   }
 
   subscribeToTopic(topic: string) {
@@ -59,5 +56,15 @@ class NotificationSubscriptionService {
         ), // (optional) callback returns whether the channel was created, false means it already existed.
     );
   }
+
+  deleteChannel(channelId: string) {
+    try {
+      PushNotification.deleteChannel(channelId);
+    } catch {
+      console.log('Failed to delete FCM Channel');
+    }
+  }
 }
-export const notificationSubscriptionService = new NotificationSubscriptionService();
+
+const notificationSubscriptionService = new NotificationSubscriptionService();
+export default notificationSubscriptionService;

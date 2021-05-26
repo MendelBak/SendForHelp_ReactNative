@@ -18,27 +18,30 @@ import SymptomsScreen from './src/screens/SymptomsScreen';
 import LocationDetailsScreen from './src/screens/LocationDetails';
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
-import { notificationSubscriptionService } from './src/notifications/NotificationSubscription.service';
+import notificationSubscriptionService from './src/notifications/NotificationSubscription.service';
 import { notificationService } from './src/notifications/Notification.service';
-import rootStores from './src/stores';
-import EmergencyStore from './src/stores/emergency.store';
-import { EMERGENCY_STORE } from './src/stores/storesKeys';
+// import rootStores from './src/stores';
 import { observer } from 'mobx-react-lite';
 import SettingsScreen from './src/screens/Settings/SettingsScreen';
-
-const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+import { FCM_CHANNEL_ID } from './src/common/enums';
+import rootStore from './src/stores/exportRootStore';
+import PushNotification from 'react-native-push-notification';
 
 const App = observer(() => {
-  // TODO: This should be in a store. (user.store.ts?) Need to make user.model.ts anyway.
-  const isSignedIn: boolean = true;
-  // const notifService = notificationService;
+  const { emergencyStore, userStore } = rootStore;
 
+  // TODO: This should be in a store. (user.store.ts?)
+  const isSignedIn: boolean = true;
+
+  // const notifService = notificationService;
   // notifService.sendLocalNotification();
 
+  notificationSubscriptionService.subscribeToTopic(FCM_CHANNEL_ID.EMERGENCY);
 
-  // TODO: Need to make notification subscriptions dependent on what role the user is. Should probably also be in the user.store
-  notificationSubscriptionService.subscribeToTopic('emergency');
-  notificationService.configurePushNotification();
+  // Check if user is Hero
+  if (!userStore.user.isHero) {
+    notificationSubscriptionService.deleteChannel(FCM_CHANNEL_ID.HERO);
+  }
 
   const TabNavigator = () => {
     return (

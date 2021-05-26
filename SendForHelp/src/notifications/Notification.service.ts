@@ -2,34 +2,6 @@ import { Alert } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
 class NotificationService {
-  constructor() {
-    // this.configurePushNotification();
-  }
-
-  // TODO: I'm not sure this is working/necessary.
-  configurePushNotification = () => {
-    console.log('configuring push notification');
-    PushNotification.configure({
-      onRegister: function (token) {
-        console.log('Push Notification Token registered :', token);
-      },
-      onNotification: function (notification) {
-        if (notification.foreground) {
-          // Alert.alert(JSON.stringify(notification.message));
-        }
-        console.log('NOTIFICATION:', notification);
-        // notification.finish(PushNotificationIOS.FetchResult.NoData);
-      },
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
-  };
-
   // This sends a LOCAL notification.
 
   // {/* This button will send a local notification. Just placed here for testing. Place where needed on a screen.  */}
