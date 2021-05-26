@@ -1,17 +1,15 @@
-import {observer} from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
 import * as React from 'react';
-import {Pressable, StyleSheet, Vibration, Text, View} from 'react-native';
+import { Pressable, StyleSheet, Vibration, Text, View } from 'react-native';
 
-import rootStores from '../stores';
-import EmergencyStore from '../stores/emergency.store';
-import {EMERGENCY_STORE} from '../stores/storesKeys';
 import SymptomModel from '../models/symptom.model';
-import {SYMPTOMS} from '../common/enums';
+import { SYMPTOMS } from '../common/enums';
 
-const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+import rootStore from '../stores/root.store';
 
-const SymptomsScreen = observer(({navigation}: {navigation: any}) => {
-  const {emergency, getSymptoms} = emergencyStore;
+const SymptomsScreen = observer(({ navigation }: { navigation: any }) => {
+  const { emergencyStore } = rootStore;
+  const { emergency, getSymptoms } = emergencyStore;
 
   return (
     <View style={styles.container}>

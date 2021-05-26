@@ -10,13 +10,10 @@ import {
 } from 'react-native';
 import { observer } from 'mobx-react-lite';
 
-import rootStores from '../stores';
-import EmergencyStore from '../stores/emergency.store';
-import { EMERGENCY_STORE } from '../stores/storesKeys';
-
-const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+import rootStore from '../stores/root.store';
 
 const FirstResponderScreen = observer(() => {
+  const { emergencyStore } = rootStore;
   const {
     getEmergencyLocation,
     getIsEmergency,

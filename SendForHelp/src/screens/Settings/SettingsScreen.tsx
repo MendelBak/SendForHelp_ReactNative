@@ -4,18 +4,16 @@ import React from 'react';
 import { Text, View, StyleSheet, Switch } from 'react-native';
 
 // Internal
-import rootStores from '../../stores';
-import { USER_STORE } from '../../stores/storesKeys';
-import UserStore from '../../stores/user.store';
-
-const userStore: UserStore = rootStores[USER_STORE];
+import rootStore from '../../stores/root.store';
 
 const SettingsScreen = observer(
   ({ route, navigation }: { route: any; navigation: any }) => {
+    const { userStore } = rootStore;
     const { user } = userStore;
 
-    const toggleUserHeroStatus = () => {
-      user.isHero = !user.isHero;
+    const toggleHeroStatus = () => {
+      // user.isHero = !user.isHero;
+      userStore.toggleHeroStatus();
     };
 
     return (
@@ -26,7 +24,7 @@ const SettingsScreen = observer(
           trackColor={{ false: '#767577', true: '#FF4C00' }}
           thumbColor={user.isHero ? '#f5dd4b' : '#f4f3f4'}
           ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleUserHeroStatus}
+          onValueChange={toggleHeroStatus}
           value={user.isHero}
         />
       </View>

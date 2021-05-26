@@ -19,13 +19,10 @@ import LocationDetailsScreen from './src/screens/LocationDetails';
 import LoginScreen from './src/screens/Auth/LoginScreen';
 import SignupScreen from './src/screens/Auth/SignupScreen';
 import notificationSubscriptionService from './src/notifications/NotificationSubscription.service';
-import { notificationService } from './src/notifications/Notification.service';
-// import rootStores from './src/stores';
 import { observer } from 'mobx-react-lite';
 import SettingsScreen from './src/screens/Settings/SettingsScreen';
 import { FCM_CHANNEL_ID } from './src/common/enums';
-import rootStore from './src/stores/exportRootStore';
-import PushNotification from 'react-native-push-notification';
+import rootStore from './src/stores/root.store';
 
 const App = observer(() => {
   const { emergencyStore, userStore } = rootStore;

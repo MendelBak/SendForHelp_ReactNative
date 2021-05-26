@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx';
 import Geolocation from 'react-native-geolocation-service';
 import { Alert, PermissionsAndroid, Platform } from 'react-native';
 import { configure } from 'mobx';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import * as RootNavigation from '../../RootNavigation';
 
 // Internal

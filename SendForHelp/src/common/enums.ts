@@ -6,3 +6,9 @@ export enum SYMPTOMS {
   OTHER = 'other',
 }
 
+export enum FCM_CHANNEL_ID {
+  EMERGENCY = 'emergency',
+  HERO = 'hero',
+  BYSTANDER = 'bystander',
+  DEFAULT = 'default_channel_id',
+}

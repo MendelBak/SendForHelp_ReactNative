@@ -53,11 +53,12 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 ## Potential Monetization Strategies
 
 - Monthly subscription to use app. Free first month, or reduced for new members/early adopters
+- Corporate training sessions on safety (this actually can make a lot of money)
 - Sell swag.
 - Donations.
 - Corporate sponsors.
 - Admin board for companies / apartment building / office buildings. Manage employees information, health issues, exact location (which floor, access codes), coordination with building security, etc. Company can buy and gift swipes to employees (unlimited emergency swipes) as perks.
-- Corporate training sessions on safety (this actually can make a lot of money)
 - Subscription for storing extra medical info (allergies, pre-existing medical conditions)
 - Crowd funding (everyone in immediate vicinity of emergency prompted to donate small amount).
 - Pay for swipe (controversial). Ability to offload your payment to victim by scanning their QR code so that people aren't hesitant to swipe due to being charged.
+- Heroes cannot be paid, since that would prevent the Good Samaritan Law defense in the case of lawsuit, however, perhaps we can allow a second class of Hero; official company contracter, a la United Hatzalah. These Heroes would be equipped by the company with livesaving equipment (again, like United Hatzalah), might be paid a salary/tips/bonus for calls, etc. These Heroes would only be accessible to people paying for that rescue tier. 

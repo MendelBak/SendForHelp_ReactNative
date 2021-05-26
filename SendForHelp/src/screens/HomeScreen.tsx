@@ -11,15 +11,12 @@ import {
   Easing,
 } from 'react-native';
 
-// Internal
-import EmergencyStore from '../stores/emergency.store';
-import rootStores from '../stores';
-import { EMERGENCY_STORE } from '../stores/storesKeys';
-
-const emergencyStore: EmergencyStore = rootStores[EMERGENCY_STORE];
+import rootStore from '../stores/root.store';
 
 const HomeScreen = observer(
   ({ route, navigation }: { route: any; navigation: any }) => {
+    const { emergencyStore } = rootStore;
+
     const animationValue = useRef(new Animated.Value(0)).current;
     const scaleValue = useRef(0);
 
