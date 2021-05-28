@@ -6,8 +6,6 @@ import InAppBrowser from 'react-native-inappbrowser-reborn';
 import { getDeepLink } from '../../../utilities';
 import { URI } from '../../../URI';
 
-// const URI = 'http://54.242.127.157:3000';
-
 const LoginScreen = observer(({ navigation }: { navigation: any }) => {
   const handeOAuthLogin = async () => {
     const deepLink = getDeepLink();
