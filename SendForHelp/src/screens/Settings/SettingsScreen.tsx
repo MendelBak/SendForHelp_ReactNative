@@ -27,6 +27,16 @@ const SettingsScreen = observer(
           onValueChange={toggleHeroStatus}
           value={user.isHero}
         />
+        <View style={styles.heroSubtextView}>
+          <Text style={styles.heroSubtext}>
+            Opt me into receiving messages about emergencies in my area.
+          </Text>
+
+          <Text style={styles.heroSubtext}>
+            By selecting this option, I affirm that I am a trained First
+            Responder.
+          </Text>
+        </View>
       </View>
     );
   },
@@ -42,5 +52,11 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'grey',
     backgroundColor: '#F0F0F3',
+  },
+  heroSubtextView: {
+    width: 200,
+  },
+  heroSubtext: {
+    fontSize: 10,
   },
 });
