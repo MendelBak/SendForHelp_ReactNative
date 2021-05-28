@@ -22,23 +22,6 @@ const FirstResponderScreen = observer(() => {
     nearestIntersection,
   } = emergencyStore;
 
-  const returnNearestIntersection = () => {
-    if (nearestIntersection) {
-      return (
-        <>
-          {/* <Text>
-            Nearest Intersection: {nearestIntersection?.intersection?.street1} -
-            {nearestIntersection?.intersection?.street2}
-          </Text>
-          <Text>
-            Emergency Distance from Intersection:
-            {nearestIntersection?.intersection?.distance}
-          </Text> */}
-        </>
-      );
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.emergencyStatus}>
@@ -48,61 +31,61 @@ const FirstResponderScreen = observer(() => {
         </Text>
       </View>
 
-      <Pressable style={styles.welcome}>
-        <Text style={{ fontSize: 15, color: 'white' }}>
-          Location of Emergency
-        </Text>
-
-        {returnNearestIntersection()}
-        <Text>
-          Nearest Intersection: {nearestIntersection?.intersection?.street1} -
-          {nearestIntersection?.intersection?.street2}
-        </Text>
-        <Text>
-          Emergency Distance from Intersection:
-          {nearestIntersection?.intersection?.distance}
-        </Text>
-        <Text>Latitude: {getEmergencyLocation.latitude}</Text>
-        <Text>Longitude: {getEmergencyLocation.longitude}</Text>
-      </Pressable>
-
-      <Pressable
-        disabled={
-          !getIsEmergency ||
-          !getEmergencyLocation.latitude ||
-          !getEmergencyLocation.longitude ||
-          // TODO: Replace this with the ID of the current user instead of this fake userID.
-          getFirstResponders.includes('Mendel')
-        }
-        onPress={() => (
-          emergencyStore.addFirstResponder('123'),
-          Vibration.vibrate(200),
-          Linking.openURL(
-            `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
-          )
-        )}
-        style={styles.alertButton}>
-        <View style={styles.alertButton}>
-          <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
-        </View>
-      </Pressable>
-
       {getIsEmergency ? (
-        <View
-          style={{
-            backgroundColor: 'grey',
-            width: 'auto',
-            height: 'auto',
-            padding: 10,
-          }}>
-          <Text style={{ color: 'white' }}>
-            -- Choking: {getSymptoms.choking.toString()}
-          </Text>
-          <Text>-- Drowning: {getSymptoms.drowning.toString()}</Text>
-          <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
-          <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
-          <Text>-- Other: {getSymptoms.other.toString()}</Text>
-        </View>
+        <>
+          <Pressable style={styles.welcome}>
+            <Text>Location of Emergency (Data Is For Testing)</Text>
+
+            <Text style={{ fontSize: 15, color: 'white' }}>
+              Nearest Intersection:
+              {nearestIntersection?.intersection?.street1} -
+              {nearestIntersection?.intersection?.street2}
+            </Text>
+            <Text>
+              Emergency Distance from Intersection:
+              {nearestIntersection?.intersection?.distance}
+            </Text>
+            <Text>Latitude: {getEmergencyLocation.latitude}</Text>
+            <Text>Longitude: {getEmergencyLocation.longitude}</Text>
+          </Pressable>
+
+          <Pressable
+            disabled={
+              !getIsEmergency ||
+              !getEmergencyLocation.latitude ||
+              !getEmergencyLocation.longitude ||
+              // TODO: Replace this with the ID of the current user instead of this fake userID.
+              getFirstResponders.includes('Mendel')
+            }
+            onPress={() => (
+              emergencyStore.addFirstResponder('123'),
+              Vibration.vibrate(200),
+              Linking.openURL(
+                `https://www.google.com/maps/search/?api=1&query=${getEmergencyLocation.latitude}+${getEmergencyLocation.longitude}`,
+              )
+            )}
+            style={styles.alertButton}>
+            <View style={styles.alertButton}>
+              <Text style={styles.alertButton__text}>I'M ON MY WAY!</Text>
+            </View>
+          </Pressable>
+
+          <View
+            style={{
+              backgroundColor: 'grey',
+              width: 'auto',
+              height: 'auto',
+              padding: 10,
+            }}>
+            <Text style={{ color: 'white' }}>
+              -- Choking: {getSymptoms.choking.toString()}
+            </Text>
+            <Text>-- Drowning: {getSymptoms.drowning.toString()}</Text>
+            <Text>-- Hemmoraging: {getSymptoms.hemmoraging.toString()}</Text>
+            <Text>-- Blunt Trauma: {getSymptoms.bluntTrauma.toString()}</Text>
+            <Text>-- Other: {getSymptoms.other.toString()}</Text>
+          </View>
+        </>
       ) : null}
 
       {getIsEmergency && getFirstResponders.length > 0 ? (
