@@ -35,6 +35,10 @@ class NotificationSubscriptionService {
     PushNotification.subscribeToTopic(topic);
   }
 
+  unsubscribeFromTopic(topic: string) {
+    PushNotification.unsubscribeFromTopic(topic);
+  }
+
   createChannel(
     id: string,
     name: string,

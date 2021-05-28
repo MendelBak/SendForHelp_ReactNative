@@ -10,8 +10,8 @@ import { ISymptom } from '../interfaces/ISymptom';
 export default module.exports = {
   createEmergency: async (emergency: any) => {
     try {
-      const newEmergencyLocation: IEmergencyLocation = new EmergencyLocationSchema(
-        {
+      const newEmergencyLocation: IEmergencyLocation =
+        new EmergencyLocationSchema({
           altitudeAccuracy: emergency.emergencyLocation.altitudeAccuracy,
           altitude: emergency.emergencyLocation.altitude,
           accuracy: emergency.emergencyLocation.accuracy,
@@ -19,8 +19,7 @@ export default module.exports = {
           longitude: emergency.emergencyLocation.longitude,
           latitude: emergency.emergencyLocation.latitude,
           speed: emergency.emergencyLocation.speed,
-        }
-      );
+        });
 
       const newSymptom: ISymptom = new SymptomSchema({
         bluntTrauma: emergency.symptom.bluntTrauma,
@@ -41,7 +40,6 @@ export default module.exports = {
 
       newEmergencyLocation.emergency = emergencySchema._id;
       newSymptom.emergency = emergencySchema._id;
-      console.log('ello world');
 
       await newSymptom.save();
       await newEmergencyLocation.save();
@@ -50,7 +48,9 @@ export default module.exports = {
         newEmergencyLocation
       );
       const newEmergency = await emergencySchema.save();
-      await NotificationController.sendEmergencyTopicPushNotification();
+      await NotificationController.sendEmergencyTopicPushNotification(
+        newEmergencyLocation
+      );
       return newEmergency;
     } catch (err) {
       throw new Error(`Server Error, could not create new emergency: ${err}`);

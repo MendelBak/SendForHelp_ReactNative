@@ -13,19 +13,11 @@ import EmergencyModel from '../models/emergency.model';
 import { SYMPTOMS } from '../common/enums';
 import { URI } from '../../URI';
 
-configure({
-  enforceActions: 'always',
-  computedRequiresReaction: true,
-  // reactionRequiresObservable: true,
-  observableRequiresReaction: true,
-  disableErrorBoundaries: false,
-});
-
 export default class EmergencyStore {
   emergency: EmergencyModel = new EmergencyModel();
   // private location: EmergencyLocationModel = new EmergencyLocationModel();
   // private symptoms: SymptomsModel = new SymptomsModel();
-  nearestIntersection: any;
+  nearestIntersection: any = undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -149,13 +141,20 @@ export default class EmergencyStore {
     return this.emergency.emergencyLocation;
   }
 
+  setNearestIntersection(intersectionData: any): void {
+    this.nearestIntersection = intersectionData;
+  }
+
+  // HACK: This function is probably unecessary, since I'm using, literally, the exact same function in the backend, in order to use the intersection in the push notification header, so why make two identical API calls?.
+  // I'm keeping this API call here, for now, because the backend may change, also, it seems weird to get the data from the notification.
+  // Worth looking into.
   getNearestIntersection = (locationData: any) => {
     axios
       .get(
         `http://api.geonames.org/findNearestIntersectionOSMJSON?lat=${locationData?.coords?.latitude}&lng=${locationData?.coords?.longitude}&username=bystanderAccount`,
       )
       .then((response) => {
-        this.nearestIntersection = response.data;
+        this.setNearestIntersection(response.data);
       })
       .catch((error) => {
         console.error(
