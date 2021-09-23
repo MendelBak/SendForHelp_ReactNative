@@ -8,4 +8,5 @@ export interface IUser extends mongoose.Document {
   age: number;
   email: string;
   googleId: string;
+  isHero: boolean;
 }

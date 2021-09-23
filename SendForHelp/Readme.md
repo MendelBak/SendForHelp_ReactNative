@@ -32,6 +32,13 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 
 ## General TODO
 
+- PRIORITY: Need to figure out how to prevent Push Notifications to users who opt out and how to persist that choice across app refresh or kill.
+- Upgrade to v6 of React Navigation.
+- Check all packages and upgrade if needed.
+- Install UI Kitten. Design and create layout (including nav. hamburger menu + sliding sidebar menu?), theme, color palette, etc. 
+- Comment out Details page.
+- Work on user flow. (Users coming from clicking on notification. Heroes who are also Bystanders. Auto dial 911?)
+
 - Need to figure out way to determine if several calls for help in nearby vicinity are the same emergency. Timing + vicinity + prompt the user?
 - Handle if users don't turn on GPS during call event.
 - Create `Devices` collection to track user's devices. Store FCM token, since they are unique. One-to-many relationship with `users` collection. Allows notifications to be sent to specific users, if needed (primarily needed for peer-to-peer direct messaging)
@@ -53,6 +60,9 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 ## Potential Monetization Strategies
 
 - Monthly subscription to use app. Free first month, or reduced for new members/early adopters
+- Charge insurance.
+- Partner with life insurance companies.
+- Integrate with private ambulance company APIs. Send them automated calls upon alert and charge per call.
 - Corporate training sessions on safety (this actually can make a lot of money)
 - Sell swag.
 - Donations.
@@ -61,4 +71,4 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 - Subscription for storing extra medical info (allergies, pre-existing medical conditions)
 - Crowd funding (everyone in immediate vicinity of emergency prompted to donate small amount).
 - Pay for swipe (controversial). Ability to offload your payment to victim by scanning their QR code so that people aren't hesitant to swipe due to being charged.
-- Heroes cannot be paid, since that would prevent the Good Samaritan Law defense in the case of lawsuit, however, perhaps we can allow a second class of Hero; official company contracter, a la United Hatzalah. These Heroes would be equipped by the company with livesaving equipment (again, like United Hatzalah), might be paid a salary/tips/bonus for calls, etc. These Heroes would only be accessible to people paying for that rescue tier. 
+- Heroes cannot be paid, since that would prevent the Good Samaritan Law defense in the case of lawsuit, however, perhaps we can allow a second class of Hero; official company contracter, a la United Hatzalah. These Heroes would be equipped by the company with livesaving equipment (again, like United Hatzalah), might be paid a salary/tips/bonus for calls, etc. These Heroes would only be accessible to people paying for that rescue tier.

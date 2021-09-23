@@ -11,7 +11,7 @@ export default class UserModel {
   age!: number;
   email!: string;
   googleId!: string;
-  isHero: boolean = true;
+  isHero: boolean = false;
 
   constructor(userModel?: UserModel) {
     makeAutoObservable(this);

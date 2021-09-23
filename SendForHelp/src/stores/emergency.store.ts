@@ -35,6 +35,7 @@ export default class EmergencyStore {
       firstResponders: [],
       emergencyLocation: new EmergencyLocationModel(position),
       symptom: new SymptomModel(),
+      // TODO: Replace with real user ID.
       userId: '123',
     });
 

@@ -12,7 +12,6 @@ const SettingsScreen = observer(
     const { user } = userStore;
 
     const toggleHeroStatus = () => {
-      // user.isHero = !user.isHero;
       userStore.toggleHeroStatus();
     };
 
