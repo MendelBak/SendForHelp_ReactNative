@@ -29,6 +29,9 @@ navigate inside the `/SendForHelp` directory and open two terminal windows.
 - Level 2 or Advanced rescuers become in charge of emergency if they come to a scene with only a Basic Rescuer.
 - Auto Video and voice capture.
 - Override DO NOT DISTURB mode on rescuers phones for emergency alert and on requesters' phone for follow up alerts.
+- Set times when Heroes are available or when they are not, and should not receive alerts.
+- Tipping Heroes after rescue (victim and bystanders). Hero can choose to send tip to charity instead of taking the tip.
+- Insurance for Heroes. Offer it as an upgradeable option?
 
 ## General TODO
 
